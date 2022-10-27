@@ -1,0 +1,146 @@
+% Time-stamp: <2022-10-27 13:55:03 ubuntu>
+% Romain Lafarguette 2020, https://romainlafarguette.github.io/
+
+%% ---------------------------------------------------------------------------
+%% Preamble: Packages and Setup
+%% ---------------------------------------------------------------------------
+% Class 
+\documentclass{beamer}
+
+% Font and encoding
+\usepackage[utf8]{inputenc} % Input font
+\usepackage[T1]{fontenc} % Output font
+\usepackage{lmodern} % Standard LateX font
+\usefonttheme{serif} % Standard LateX font
+
+% Maths 
+\usepackage{amsfonts, amsmath, mathabx, bm, bbm} % Maths Fonts
+
+% Graphics
+\usepackage{graphicx} % Insert graphics
+\usepackage{subfig} % Multiple figures in one graphic
+\graphicspath{{/../static/img}{/../static/diagrams}}
+
+% Layout
+\usepackage{changepage}
+
+% Colors
+\usepackage{xcolor}
+\definecolor{imfblue}{RGB}{0,76,151} % Official IMF color
+\setbeamercolor{title}{fg=imfblue}
+\setbeamercolor{frametitle}{fg=imfblue}
+\setbeamercolor{structure}{fg=imfblue}
+\setbeamercolor{page number in head/foot}{fg=imfblue}
+\setbeamerfont{page number in head/foot}{size=\footnotesize}
+
+% Tables
+\usepackage{booktabs,rotating,multirow} % Tabular rules and other macros
+\usepackage{pdflscape,afterpage} % Landscape mode and afterpage
+\usepackage{threeparttable} % Split long tables
+\usepackage[font=scriptsize,labelfont=scriptsize,labelfont={color=imfblue}]{caption}
+
+% Import files
+\usepackage{import}
+
+% Appendix slides
+\usepackage{appendixnumberbeamer} % Manage page numbers for appendix slides
+
+% A few macros: environments
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{10pt}}{\enditemize}
+\newenvironment{wideenumerate}{\enumerate\addtolength{\itemsep}{10pt}}{\endenumerate}
+
+\newenvironment{extrawideitemize}{\itemize\addtolength{\itemsep}{30pt}}{\enditemize}
+\newenvironment{extrawideenumerate}{\enumerate\addtolength{\itemsep}{30pt}}{\endenumerate}
+
+
+% Define the footer with higher/lower adjustment
+\defbeamertemplate{footline}{higher page number}
+{
+  \hfill
+  \usebeamercolor[fg]{page number in head/foot}
+  \usebeamerfont{page number in head/foot}  
+  \thepage/\inserttotalframenumber\kern1em\vskip2pt %Change xxpt to
+                                %lower/higher the footnote
+}
+\setbeamertemplate{footline}[higher page number]
+
+
+% Remove navigation symbols and other superfluous elements
+\setbeamertemplate{navigation symbols}{}
+\setbeameroption{hide notes}
+\setbeamertemplate{note page}[plain]
+\beamertemplatenavigationsymbolsempty
+\hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
+
+% Institute font
+\setbeamerfont{institute}{size=\footnotesize}
+\DeclareMathSizes{10}{9}{7}{5}  
+
+%% ---------------------------------------------------------------------------
+%% Title info
+%% ---------------------------------------------------------------------------
+\title[Concepts]{A Gentle Introduction to the Statistics of Time Series}
+\author[R. Lafarguette]{Romain Lafarguette}
+\institute[]{Quant at the Abu Dhabi Investment Authority \\ IMF External Consultant}
+
+\date[STI, 08 Nov 2022]{Singapore Training Institute, 08 November 2022}
+
+\titlegraphic{
+    \begin{figure}
+    \centering
+    \subfloat{{\includegraphics[width=2cm]{../static/img/imf_logo}}}%
+    \end{figure}
+}
+
+%% ---------------------------------------------------------------------------
+%% Title slide
+%% ---------------------------------------------------------------------------
+\begin{document}
+
+\begingroup
+\renewcommand{\insertframenumber}{}
+\begin{frame}
+  %\addtocounter{framenumber}{-1}
+\maketitle
+\end{frame}
+\endgroup
+
+
+%% ---------------------------------------------------------------------------
+%% End document
+%% ---------------------------------------------------------------------------
+\end{document}
+
+
+%% ---------------------------------------------------------------------------
+%% Sample code
+%% ---------------------------------------------------------------------------
+
+% \begin{frame}
+% \frametitle{Example with a Figure}
+%     \makebox[\linewidth]{\includegraphics[width=\paperwidth]{../output/step_007_top_ae_dotplot.pdf}}
+% \end{frame}
+
+
+% \begin{frame}
+% \begin{adjustwidth}{-2em}{-2em} % Wider frame 
+%   \frametitle{Example with a Wide Table}  
+%   \setlength\tabcolsep{4pt}  % default value: 6pt
+%   %\footnotesize
+%   \centering
+%   \input{../output/mytable.tex}\\
+% \end{adjustwidth}
+% \end{frame}
+
+
+
+
+
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
