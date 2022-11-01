@@ -1,4 +1,4 @@
-% Time-stamp: <2022-10-27 13:55:03 ubuntu>
+% Time-stamp: <2022-10-30 20:34:56 Romain>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -79,9 +79,9 @@
 %% ---------------------------------------------------------------------------
 %% Title info
 %% ---------------------------------------------------------------------------
-\title[Concepts]{A Gentle Introduction to the Statistics of Time Series}
+\title[Concepts]{Basic Concepts in Time Series}
 \author[R. Lafarguette]{Romain Lafarguette}
-\institute[]{Quant at the Abu Dhabi Investment Authority \\ IMF External Consultant}
+\institute[IMF]{IMF External Consultant}
 
 \date[STI, 08 Nov 2022]{Singapore Training Institute, 08 November 2022}
 
@@ -104,6 +104,103 @@
 \maketitle
 \end{frame}
 \endgroup
+
+
+%% ---------------------------------------------------------------------------
+%% Core
+%% ---------------------------------------------------------------------------
+
+
+\begin{frame}
+  \frametitle{Random variable}
+    \begin{itemize}
+    \item A \textbf{random variable} is a measurable function $f: \Omega \mapsto \mathcal{R}$ that assigns to
+      a set of outcome $\Omega$ a \textbf{value}, often a real number.
+     \item The probability of an outcome is equal to its \textbf{measure} divided by
+        the measure of all possible outcomes
+     \begin{itemize}
+      \item Example: obtaining an even number by rolling a dice: $\{2, 4, 6\}$
+      \item Probability to obtain an even number by rolling a dice: $m(\{2, 4,
+        6\})/m(\{1, 2, 3, 4, 5, 6\}) = \frac{1}{2}$ \emph{(here, the measure
+          simply "counts" the outcomes with equal weights)}
+        \end{itemize}     
+    \end{itemize}    
+
+    
+  \begin{itemize}
+  \item Random variables are the "building block" of statistics:
+    \begin{itemize}
+    \item Random variables are characterized by their distribution (generating
+      function, moments, quantiles, etc.)
+    \item The behavior of two or more random variables can be characterized by
+      their dependence/independence, matrix of variance-covariance, joint
+      distribution, etc.
+    \item The main theorem of statistics (law of large numbers, central limit
+      theorem, etc.) leverages the properties of random variables
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Stochastic Process}
+
+  \begin{itemize}
+  \item A stochastic process is a sequence of random variables indexed by time
+    ($t$):
+    \begin{equation*}
+      {\dots, Y_1, Y_2, \dots, Y_t, Y_{t+1}, \dots} = 
+    \end{equation*}
+    
+  \end{itemize}
+  
+
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Stationarity}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Ergodicity}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Moments}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Estimator}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Convergence}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Biais}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Efficiency}
+  
+\end{frame}
+
+
 
 
 %% ---------------------------------------------------------------------------
@@ -139,8 +236,3 @@
 
 
 
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
