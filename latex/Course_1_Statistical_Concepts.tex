@@ -1,4 +1,4 @@
-% Time-stamp: <2022-10-27 14:00:35 ubuntu>
+% Time-stamp: <2022-11-02 12:36:07 ubuntu>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -45,13 +45,15 @@
 % Appendix slides
 \usepackage{appendixnumberbeamer} % Manage page numbers for appendix slides
 
+% References
+\usepackage{hyperref}
+
 % A few macros: environments
 \newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{10pt}}{\enditemize}
 \newenvironment{wideenumerate}{\enumerate\addtolength{\itemsep}{10pt}}{\endenumerate}
 
 \newenvironment{extrawideitemize}{\itemize\addtolength{\itemsep}{30pt}}{\enditemize}
 \newenvironment{extrawideenumerate}{\enumerate\addtolength{\itemsep}{30pt}}{\endenumerate}
-
 
 % Define the footer with higher/lower adjustment
 \defbeamertemplate{footline}{higher page number}
@@ -63,7 +65,6 @@
                                 %lower/higher the footnote
 }
 \setbeamertemplate{footline}[higher page number]
-
 
 % Remove navigation symbols and other superfluous elements
 \setbeamertemplate{navigation symbols}{}
@@ -79,9 +80,9 @@
 %% ---------------------------------------------------------------------------
 %% Title info
 %% ---------------------------------------------------------------------------
-\title[Concepts]{A Gentle Introduction to Time Series Statistical Concepts}
-\author[R. Lafarguette]{Romain Lafarguette}
-\institute[]{Quant at the Abu Dhabi Investment Authority \\ IMF External Consultant}
+\title[Concepts]{Introduction to Time Series Econometrics}
+\author[R. Lafarguette]{Romain Lafarguette, Ph.D.}
+\institute[IMF]{Quant \& IMF External Consultant}
 
 \date[STI, 08 Nov 2022]{Singapore Training Institute, 08 November 2022}
 
@@ -106,21 +107,283 @@
 \endgroup
 
 
+\begin{frame}
+  \frametitle{Outline}
+  \begin{enumerate}
+  \item \textbf{Data concepts}: population, sample, data types, data generating process, etc.
+  \item \textbf{Estimation strategy}
+  \end{enumerate}
+
+
+\smallskip
+\emph{NB: this slide-deck is inspired by the excellent course of \url{https://sites.google.com/view/christophe-hurlin/teaching-resources}{Christophe Hurlin}}  
+\end{frame}
+
+
+
 %% ---------------------------------------------------------------------------
-%% Main slides
+%% Core
 %% ---------------------------------------------------------------------------
 
 \begin{frame}
-  \frametitle{Type of Data}
-  Statistical data can be organized into:
+  \frametitle{Overview}
+
+Financial econometrics (including time-series econometrics) are based on four main elements:\\
+\smallskip
+
+  \begin{wideenumerate}
+    \item A sample of data
+    \item An econometric model, based on a theory or not
+    \item An estimation method to estimate the coefficients of the model
+    \item Inference/testing approach to validate the estimation
+  \end{wideenumerate}
+  
+\end{frame}
+
+
+
+\section{Data Concepts}
+\begin{frame}
+  \frametitle{Population vs. Sample}
+
+  \begin{block}{Definition: Population}
+    A \textbf{population} is defined as including all entities (e.g. banks or firms) or all the time periods of the processus that has to be explained
+  \end{block}
+
+\smallskip
+  
   \begin{wideitemize}
-    \item \textbf{Time series data}: One data series, with a set of dates
-    \item \textbf{Panel data}: data of one or more variable, organized by (i) unit and (ii) time
-    \item \textbf{Pooled data}
+    \item In most cases, it is impossible to observe the entire statistical population, due to constraints (recording period, cost, etc.)
+    \item A researcher would instead observe a \textbf{statistical sample} from the population. He will estimate an econometric model to understand the \textbf{properties on the population as a whole}.
+  \end{wideitemize} 
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Data Generating Process}
+  
+  \begin{block}{Definition: Data Generating Process}
+    A \textbf{Data Generating Process (DGP)} is a process in the real world that "generates" the data (or the sample) of interest
+  \end{block}
+
+  \begin{exampleblock}{Example: Data Generating Process}
+    Let us assume that there is a linear relationship between interest rates in two countries ($R, R^*$), their forward ($F$) and their spot exchange rate ($S$).\\
+
+    \begin{equation*}
+      \frac{F}{S} = \frac{1+R}{1+R^*}
+    \end{equation*}
+
+    This non-arbitrage relationship (CIP) can be used in the foreign exchange market to determine the forward exchange rate
+
+    \begin{equation*}
+      \mathbb{E}[F |S=s, R=r, R^*= r^*] = s*\frac{1+r}{1+r^*}
+    \end{equation*}
+
+This relationship is the \textbf{Data Generating Process} for $F$     
+  \end{exampleblock}
+
+The equivalent of population for time series econometrics is the DGP.\\
+NB: note that I use $R$ to describe the random variable and $r$ to describe its realization
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Econometrics Challenge}
+  The challenge of econometrics is to draw conclusions about a DGP (or population), after observing only one realization $\{x_1, \dots X_N\}$ of a random sample (the dataset).\\
+
+%TODO: add a diagram
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Data Types}
+
+  In econometrics, sets can be mainly distinguished in three types:\\
+  \smallskip
+  
+  \begin{wideenumerate}
+    \item Cross-sectional data
+    \item Time series data
+    \item Panel data
+  \end{wideenumerate}
+  
+\end{frame}
+
+% ADD some diagrams
+\begin{frame}
+  \frametitle{Cross-Sectional Data}
+  Cross-sectional data are the most common type of data encountered in statistics and econometrics.\\ 
+  \smallskip
+  
+  \begin{wideitemize}
+    \item Data at the entities level: banks, countries, individuals, households, etc.
+    \item \textbf{No time dimension}: only one "wave" or multiple waves of different entities
+    \item Order of data does not matter: no time structure
   \end{wideitemize}
 \end{frame}
 
 
+\begin{frame}
+  \frametitle{Time Series Data}
+
+  Time series data are very common in financial econometrics and central banking. They entail specific estimation methods to do the \textbf{time-dependence}.\\
+  
+  \begin{wideitemize}
+    \item Data for a single entity (person, bank, country, etc.) collected at multiple time periods. Repeated observations of the same variables (interest rate, GDP, prices, etc.)
+    \item Order of data is important!
+    \item The observations are typically not independent over time
+    \item In this case, the notion of population corresponds to the \textbf{Data Generating Process (DGP)} 
+  \end{wideitemize}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Panel Data}
+  Also called longitudinal data. They contain the most information and allow for more complex estimation and analysis.
+
+  \begin{wideitemize}
+    \item Data for multiple entities (individuals, firms, countries, banks, etc.) in which outcomes and characteristics of each entity are observed at multiple points in time
+    \item Combine cross-sectional and time-series information
+    \item Present several advantages with respect to cross-sectional and time series data, depending on the topic at hands
+  \end{wideitemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Econometric Model}
+
+  \begin{block}{Definition: Econometric Model}
+    An econometric model specificies the statistical relationship between different economic variables, that are expected to be stable over time
+  \end{block}
+
+  \begin{enumerate}
+  \item \textbf{Parametric model:} fully characterization of the relationship by a \textbf{set of parameters} $\theta$ and a \textbf{link function} $f$ supposed to be known; the specification can be linear or non linear, and includes some randomness $\epsilon$
+    \begin{equation*}
+      Y = f(X; \theta) + \epsilon
+    \end{equation*}
+
+  \item \textbf{Non-parametric and semi-parametric models}: the link function can not be described using a finite number of parameters. The link function is assumed to be unknown and has to be estimated
+    
+  \end{enumerate}
+  
+\end{frame}
+
+
+\section{Financial Econometrics}
+
+\begin{frame}
+  \frametitle{Empirical Strategy}
+  The general approach of (financial) econometrics is as follows:\\
+  \smallskip
+
+  \begin{wideenumerate}
+  \item Specification of the model
+  \item Estimation of the parameters
+  \item Diagnostic tests
+    \begin{itemize}
+    \item Significance tests
+    \item Specification tests
+    \item Backtesting tests
+    \item etc.
+    \end{itemize}
+  \item Interpretation and use of the model
+  \end{wideenumerate}
+  
+\end{frame}
+
+\section{Misc}
+
+\begin{frame}
+  \frametitle{Random variable}
+    \begin{itemize}
+    \item A \textbf{random variable} is a function $f: \Omega \mapsto \mathcal{R}$ that assigns to
+      a set of outcome $\Omega$ a \textbf{value}, often a real number.
+     \item The probability of an outcome is equal to its \textbf{measure} divided by
+        the measure of all possible outcomes
+     \begin{itemize}
+      \item Example: obtaining an even number by rolling a dice: $\{2, 4, 6\}$
+      \item Probability to obtain an even number by rolling a dice: $m(\{2, 4,
+        6\})/m(\{1, 2, 3, 4, 5, 6\}) = \frac{1}{2}$ \emph{(here, the measure
+          simply "counts" the outcomes with equal weights)}
+        \end{itemize}     
+    \end{itemize}    
+
+    
+  \begin{itemize}
+  \item Random variables are the "building block" of statistics:
+    \begin{itemize}
+    \item Random variables are characterized by their distribution (generating
+      function, moments, quantiles, etc.)
+    \item The behavior of two or more random variables can be characterized by
+      their dependence/independence, matrix of variance-covariance, joint
+      distribution, etc.
+    \item The main theorem of statistics (law of large numbers, central limit
+      theorem, etc.) leverages the properties of random variables
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Stochastic Process}
+
+  \begin{itemize}
+  \item A stochastic process is a sequence of random variables indexed by time
+    ($t$):
+    \begin{equation*}
+      {\dots, Y_1, Y_2, \dots, Y_t, Y_{t+1}, \dots} = 
+    \end{equation*}
+    
+  \end{itemize}
+  
+
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Stationarity}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Ergodicity}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Moments}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Estimator}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Convergence}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Biais}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Efficiency}
+  
+\end{frame}
 
 
 
@@ -158,8 +421,3 @@
 
 
 
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
