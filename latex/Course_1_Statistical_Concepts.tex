@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-03 15:54:59 ubuntu>
+% Time-stamp: <2022-11-03 16:33:04 ubuntu>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -109,14 +109,19 @@
 
 \begin{frame}
   \frametitle{Outline}
+
+  This short crash-course is divided in three parts covering:\\
+  \smallskip
+  
   \begin{enumerate}
   \item \textbf{Data concepts}: population, sample, data types, data generating process, etc.
-  \item \textbf{Estimation strategy}
+  \item \textbf{Statistical Inference}: stochastic process, estimator, distributions, convergence, etc.
+  \item \textbf{Statistical Properties of Financial Time Series}: stationarity, autocorrelation, heavy tails, etc.
   \end{enumerate}
 
 
 \smallskip
-\emph{NB: this slide-deck is inspired by the excellent website of \url{https://sites.google.com/view/christophe-hurlin/teaching-resources}{Christophe Hurlin}}  
+\emph{NB: this slide-deck follows the excellent course of \url{https://sites.google.com/view/christophe-hurlin/teaching-resources}{Christophe Hurlin}}  
 \end{frame}
 
 
@@ -165,6 +170,10 @@ Financial econometrics (including time-series econometrics) are based on four ma
   \begin{block}{Definition: Data Generating Process}
     A \textbf{Data Generating Process (DGP)} is a process in the real world that "generates" the data (or the sample) of interest
   \end{block}
+
+\end{frame}
+
+\begin{frame}
 
   \begin{exampleblock}{Example: Data Generating Process}
     Let us assume that there is a linear relationship between interest rates in two countries ($R, R^*$), their forward ($F$) and their spot exchange rate ($S$).\\
@@ -338,7 +347,14 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
   \end{block}
 
   Distributions are equivalently represented by:
+  \begin{enumerate}
+  \item \textbf{The probability density function (pdf)}
+  \item \textbf{The cumulative density function (pdf)}  
+  \end{enumerate}
 
+\end{frame}
+  
+\begin{frame}
   \begin{itemize}
   \item \textbf{The probability density function (pdf)} usually denoted $f_X(x0)$ (remember than $X$ stands for the random variable, while $x0$ stands for a realization of the random variable) represents the relatively likelihood that the random variable $X$ will fall within a small neighborhood of $x0$ (infinitesimal concept). It is easier to conceptualize the pdf via the cdf
   \item \textbf{The cumulative density function (cdf)} usually denoted $F_X(x0)$ represents the probability that the random variable will be lower than $x0$. It cumulates the pdf ("all the small neighborhoods") such that:
@@ -557,18 +573,38 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
     \hat{\theta_T} \ \overset{p}{\to} \ \theta \qquad \text{for} \ \theta \ \in \ \mathbb{R}
   \end{equation*}
 
-\item Technically, for a stochastic process ${X_T}_{-\infty}^ {+\infty}$
+\item Technically, for a stochastic process ${\theta_T}_{-\infty}^ {+\infty}$
   \begin{equation*}
-  \hat{\theta_T} \ \overset{p}{\to} \theta \quad \Leftrightarrow \quad \text{lim}_{T \to +\infty} \mathbb{P} \left[ |X_T - \theta| > \epsilon \right] \ = \ 0 
+  \hat{\theta_T} \ \overset{p}{\to} \theta \quad \Leftrightarrow \quad \text{lim}_{T \to +\infty} \mathbb{P} \left[ |\theta_T - \theta| > \epsilon \right] \ = \ 0 
   \end{equation*}
     
 \item The convergence in probability is used to derive the \textbf{consistency property} of estimators
-
     \end{itemize}
     
   \end{frame}
+
+
+  \begin{frame}
+    \frametitle{Illustration: Distribution in Probability}
+    
+    \begin{equation*}
+\hat{X_T} \ \overset{p}{\to} c \ \text{if} \ \Leftrightarrow \quad \text{lim}_{T \to +\infty} \mathbb{P} \left[ |X_T - c| > \epsilon \right] \ = \ 0      
+    \end{equation*}
+
+    
+     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/distribution_in_proba.PNG}}
+    
+  \end{frame}
+
+
+  \begin{frame}
+    \frametitle{Interpretation}
+    \begin{wideenumerate}
+    \item The distribution of the sample moments is highly concentrated around the true value (unknown) of the population moment when the sample size $T$ tends to infinity
+    \item In other words, over a very large sample of data (for instance, hundred of thousands of observations) the \textbf{moments estimated in the sample} are then very "close" to the true value of \textbf{the moments in the population}
+    \end{wideenumerate}
+  \end{frame}
   
-%TODO: Chart convergence in probability
 
   \begin{frame}
     \frametitle{Convergence in Distribution}
@@ -647,6 +683,51 @@ X_t \ \overset{d}{\to} \ X \quad \Leftrightarrow \quad  F_T(x) = F(x) \qquad \ \
 \frametitle{... But Returns Are !}
     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/stationarity returns sp500.PNG}}
 \end{frame}
+
+
+\begin{frame}
+  \frametitle{Absence of autocorrelations}
+  \begin{exampleblock}{Fact: Common absence of autocorrelations}
+    The autocorrelations of assets returns (in general) are often insignificant, except for very small intraday time scales (around 20 minutes) for which the microstructure effects come into play
+  \end{exampleblock}
+
+\textbf{Note:} The fact that returns hardly show any serial correlation does not mean that they are independent
+
+
+\begin{block}{Definition: Autocorrelation}
+  The autocorrelation, denoted $\rho(k)$ of a weak stationary process $X_t$ is the correlation between the values of the process at different times:
+
+  \begin{equation*}
+    \rho_k \ = \ \text{Corr}(X_t, X_{t-k}) \ = \ \frac{\mathbb{E}\left[ (X_t - \mu)(X_{t-k} - \mu)\right]}{\mathbb{V}(X_t)} = \frac{\gamma_k}{\sigma^2}
+  \end{equation*}
+
+with $\mu = \mathbb{E}[X_t]$, $\sigma^2 = \mathbb{V}(X_t), \ \forall \ t$ and $\gamma_k$ the autocovariance of order $k$
+  
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Measuring Sample Autocorrelation}
+  \begin{block}{Definition: Sample Autocorrelation}
+    The \textbf{sample autocorrelation}, denoted $\hat{\rho}(k)$ of a weak stationary process $X$ is an estimator of $\rho(k)$ defined as:
+
+    \begin{equation*} 
+      \hat{\rho}_k = \text{corr}(X_t, X_{t-k}) = \frac{1}{(T-k)\hat{\sigma^2}} \sum_{t=k+1}^{R}(X_t - \hat{mu})(X_{t-k} - \hat{mu})
+    \end{equation*}
+where $\hat{\sigma^2}$ and $\hat{\mu}$ are consistent estimators of $\mu = \mathbb{E}(X_t)$ and $\sigma^2 = \mathbb{V}(X_t) \qquad \forall t$
+  \end{block}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Example: Autocorrelation of the SP500}
+  The \textbf{Autocorrelation Function (ACF)} (or \textbf{correlogram}) represents the sample autocorrelation for different lags, from $k=1$ to a maximum lag order, for instance $k=15$
+
+ \makebox[\linewidth]{\includegraphics[width=0.5\paperwidth]{../static/course_1_img/autocorrelogram.PNG}}
+  
+\end{frame}
+
 
 
   
