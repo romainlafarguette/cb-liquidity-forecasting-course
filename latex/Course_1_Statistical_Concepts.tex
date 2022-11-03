@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-03 15:06:34 ubuntu>
+% Time-stamp: <2022-11-03 15:54:59 ubuntu>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 % Graphics
 \usepackage{graphicx} % Insert graphics
 \usepackage{subfig} % Multiple figures in one graphic
-\graphicspath{{/../static/img}{/../static/diagrams}}
+\graphicspath{{/../static/img}{/../static/diagrams}{/../static/course_1_img}}
 
 % Layout
 \usepackage{changepage}
@@ -272,7 +272,7 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
 \end{frame}
 
 
-\section{Financial Econometrics}
+\section{Statistical Inference}
 
 \begin{frame}
   \frametitle{Empirical Strategy}
@@ -492,8 +492,10 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
         \end{equation*}
         
       \end{block}
+\end{frame}
 
 
+\begin{frame}
       \begin{exampleblock}{Example: Finite Sample Distribution}
         Under the Gaussianity assumption, with a sample size of $T = 10$, then:
         \begin{equation*}
@@ -518,8 +520,7 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
 
       \begin{equation*}
         \hat{\theta} = S(X_1, X_2, \dots, X_T) \sim ??? \qquad \forall \ T \ \in \mathbb{N}
-      \end{equation*}
-        
+      \end{equation*}        
     \end{wideenumerate}
     
   \end{frame}
@@ -528,12 +529,140 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
 
   \begin{frame}
     \frametitle{Asymptotic Properties}
+
+    What is the behavior of the estimator $\hat{\theta_T}$ when the sample size $T$ tends to infinity?
+
+    \begin{block}{Definition: Asymptotic Theory}
+      \textbf{Asymptotic} or \textbf{large sample theory} consists in the study of the distribution of the estimator when the sample size is sufficiently large (usually, more than 10k)
+    \end{block}
+
+    The asymptotic theory is fundamentally based on the notion of \textbf{convergence}
     
   \end{frame}
   
+
+  \begin{frame}
+    \frametitle{Convergence in Probability}
+    There are many types of convergence, but typically applied statisticians are interested in:
+   
+    \begin{enumerate}
+      \item Convergence in probability
+      \item Convergence in distribution
+    \end{enumerate}
+
+    \begin{itemize}
+\item  \textbf{Convergence in probability} (also called "mean squared convergence" or "almost sure convergence")
+
+  \begin{equation*}
+    \hat{\theta_T} \ \overset{p}{\to} \ \theta \qquad \text{for} \ \theta \ \in \ \mathbb{R}
+  \end{equation*}
+
+\item Technically, for a stochastic process ${X_T}_{-\infty}^ {+\infty}$
+  \begin{equation*}
+  \hat{\theta_T} \ \overset{p}{\to} \theta \quad \Leftrightarrow \quad \text{lim}_{T \to +\infty} \mathbb{P} \left[ |X_T - \theta| > \epsilon \right] \ = \ 0 
+  \end{equation*}
+    
+\item The convergence in probability is used to derive the \textbf{consistency property} of estimators
+
+    \end{itemize}
+    
+  \end{frame}
+  
+%TODO: Chart convergence in probability
+
+  \begin{frame}
+    \frametitle{Convergence in Distribution}
+
+    \begin{itemize}
+\item  \textbf{Convergence in distribution} is interested in the distribution of the bias (the distance between the estimator and the true value)
+
+  \begin{equation*}
+    \sqrt{T} \left(\hat{\theta_T} - \theta_0 \right) \ \sim \ \mathcal{N}(\mu_., \sigma_.) \qquad \mathcal{N} \ \text{is the most common} 
+  \end{equation*}
+
+\item Technically, for a stochastic process ${X_T}_{-\infty}^ {+\infty}$, with a cdf $F_T(.)$; $X_T$ is said to \textbf{converge in distribution} to a random variable $X$ if:
+  \begin{equation*}
+X_t \ \overset{d}{\to} \ X \quad \Leftrightarrow \quad  F_T(x) = F(x) \qquad \ \forall \ x \ \in \ \mathbb{R}
+  \end{equation*}
+    
+\item The convergence in distribution is used to derive the \textbf{asymptotic distribution} of the estimators and to make \textbf{inference} (tests) about the true value of the parameters
+
+    \end{itemize}
+    
+  \end{frame}
+
+
+
+\section{Financial Stylized Properties}
+
+\begin{frame}
+  \frametitle{Stylized Properties}
+
+  Fan and Yao (2015, the Elements of Financial Econometrics) identify 8 main "stylized facts"
+  
+  \begin{enumerate}
+  \item Stationarity
+  \item Absence of autocorrelations
+  \item Heavy tails
+  \item Asymmetry
+  \item Volatility clustering
+  \item Aggregational Gaussianity
+  \item Long range dependence
+  \item Leverage effect
+  \end{enumerate}
+  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Stationarity}
+  \begin{exampleblock}{Example}
+   In general, prices are non-stationary but returns are stationary 
+ \end{exampleblock}
+
+ \begin{block}{Definition: Weak Stationarity (Second Order Stationarity)}
+   A stochastic process ${X_t}_{t \in \mathbb{Z}}$ is weakly stationary if and only if:
+
+   \begin{itemize}
+   \item $\mathbb{E}(X^2_t) \ < \ \infty \ \quad \forall \ t \ \in \ \mathbb{Z}$
+   \item $\mathbb{E}(X_t) = \mu \ \quad \forall \ t \ \in \ \mathbb{Z}$ doesn't depend on $t$
+   \item $\text{Cov}(x_t, x_{t+h}) \ = \ \mathbb{E}[(x_{t+h} - m)(x_t - m)] \ = \ \gamma_h \quad \forall \ (t, h) \ \in \ \mathbb{Z}^2$ desn't depend on $t$
+   \end{itemize}
+
+   Weak stationarity means that the stochastic process oscillates around a constant level, is not trended, and their correlation over time is independent from the period studied. Technically, we say that the \textbf{first two moments are time-invariant}.\\
+   
+ \end{block}
+ 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Prices are Usually Non-Stationary...}
+    \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/non stationarity prices sp500.PNG}}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{... But Returns Are !}
+    \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/stationarity returns sp500.PNG}}
+\end{frame}
+
+
   
 \end{document}
-  
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Misc}
 
 \begin{frame}
@@ -565,11 +694,6 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
 \end{frame}
 
 
-\begin{frame}
-  \frametitle{Moments}
-  
-\end{frame}
-
 
 \begin{frame}
   \frametitle{Estimator}
@@ -577,10 +701,6 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
 \end{frame}
 
 
-\begin{frame}
-  \frametitle{Convergence}
-  
-\end{frame}
 
 \begin{frame}
   \frametitle{Biais}
