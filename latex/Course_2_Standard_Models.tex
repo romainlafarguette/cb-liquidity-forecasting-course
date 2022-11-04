@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-04 09:56:55 ubuntu>
+% Time-stamp: <2022-11-04 14:24:26 ubuntu>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -61,22 +61,23 @@
 \newenvironment{extrawideenumerate}{\enumerate\addtolength{\itemsep}{30pt}}{\endenumerate}
 
 % Define the footer with higher/lower adjustment
-\defbeamertemplate{footline}{higher page number}
-{
-  \hfill
-  \usebeamercolor[fg]{page number in head/foot}
-  \usebeamerfont{page number in head/foot}  
-  \thepage/\inserttotalframenumber\kern1em\vskip2pt %Change xxpt to
-                                %lower/higher the footnote
-}
-\setbeamertemplate{footline}[higher page number]
+% \defbeamertemplate{footline}{higher page number}
+% {
+%   \hfill
+%   \usebeamercolor[fg]{page number in head/foot}
+%   \usebeamerfont{page number in head/foot}  
+%   \thepage/\inserttotalframenumber\kern1em\vskip2pt %Change xxpt to
+%                                 %lower/higher the footnote
+% }
+% \setbeamertemplate{footline}[higher page number]
 
 % Remove navigation symbols and other superfluous elements
 \setbeamertemplate{navigation symbols}{}
-\setbeameroption{hide notes}
-\setbeamertemplate{note page}[plain]
 \beamertemplatenavigationsymbolsempty
+
+%\setbeamertemplate{note page}[plain]
 \hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
+\setbeameroption{hide notes}
 
 % Institute font
 \setbeamerfont{institute}{size=\footnotesize}
@@ -85,7 +86,7 @@
 %% ---------------------------------------------------------------------------
 %% Title info
 %% ---------------------------------------------------------------------------
-\title[Concepts]{Core Concepts in Financial Econometrics}
+\title[Standard Models]{Standard Time Series Models}
 \author[R. Lafarguette]{Romain Lafarguette, Ph.D.}
 \institute[IMF]{ADIA Quant \& IMF External Consultant}
 
@@ -103,14 +104,9 @@
 %% ---------------------------------------------------------------------------
 \begin{document}
 
-\begingroup
-\renewcommand{\insertframenumber}{}
 \begin{frame}
-  %\addtocounter{framenumber}{-1}
 \maketitle
 \end{frame}
-\endgroup
-
 
 % \begin{frame}
 %   \frametitle{Outline}
@@ -414,9 +410,6 @@ Implication: Models with additivative and multiplicative errors with the same pa
 \end{frame}
 
 
-
-
-
 \begin{frame}
   \frametitle{Main Idea: Control the Rate of Change}
 
@@ -451,9 +444,9 @@ Implication: Models with additivative and multiplicative errors with the same pa
   \item MA: moving average (lagged errors as inputs)
   \end{itemize}
 
-  \begin{exampleblock}
+  \begin{block}{Intuition}
     Contrary to an ETS, an ARIMA model is rarely interpretable in terms of visible data structures like trend and seasonality. But it can capture a huge range of time series patterns
-  \end{exampleblock}  
+  \end{block}  
 \end{frame}
 
 
@@ -469,20 +462,215 @@ Implication: Models with additivative and multiplicative errors with the same pa
   \item Constant variance
   \item No predictable patterns in the long term
   \end{itemize}
+
+  Stabilization: 
+  \begin{itemize}
+  \item Transformations help to \textbf{stabilize the variance}
+  \item For ARIMA modelling, we also need to \textbf{stabilize the mean}
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Identifying Non-Stationary Series}
+
+  Tips:\\
+  
+  \begin{itemize}
+  \item Time plot
+  \item The ACF of stationary data drops to zero relatively quickly
+  \item The ACF of non-stationary data decreases slowly
+  \item For non-stationary data, the value of the first coefficient is often large and positive
+  \end{itemize}
+
+  
+\end{frame}
+
+
+% Put a bunch of charts
+
+
+\begin{frame}{Differencing}
+  \begin{wideitemize}
+  \item Differencing helps to \textbf{stabilize the mean}
+  \item The differenced series is the \emph{change} (or first difference) between each observation in the original series: $y'_t = y_t - y_{t-1}$
+  \item The differenced series will have only $T-1$ values since it is not possible to calculate a difference $y'_1$ for the first observation
+  \end{wideitemize}
+
+\end{frame}
+
+
+\begin{frame}{Random Walk Model}
+  If the differenced series is white noise with zero mean:
+  \begin{block}{Specification}
+    \begin{equation*}
+      y_t - y_{t-1} = \epsilon_t \qquad \text{where} \ \epsilon_t \ \sim \ \mathcal{N}(0, \sigma^2)
+    \end{equation*}
+  \end{block}
+
+  \begin{itemize}
+  \item Very widely used for non-stationary data
+  \item This is the model behind the \textbf{naive method}
+  \item Random walks typically have:
+    \begin{itemize}
+    \item Long periods of apparent trends up or down
+    \item Sudden/unpredictable chanes in direction
+    \end{itemize}
+  \item In a random walk, the forecast are equal to the last observation
+    \begin{itemize}
+    \item Future movements up or down are equally likely
+    \end{itemize}
+  \end{itemize}   
+\end{frame}
+
+
+\begin{frame}{Random Walk with Drift Model}
+  If the differenced series has a drift $c$:
+
+  \begin{equation*}
+    y_t - y_{t-1} = c + \epsilon_t \qquad \text{where} \ \epsilon_t \ \sim \ \mathcal{N}(0, \sigma^2)
+  \end{equation*}
+  
+  \begin{wideitemize}
+  \item $c$ is the \textbf{average change} between consecutive observations
+  \item If $c > 0$, $y_t$ will tend to drift upwards and vice-versa
+  \item This is the model behind the \textbf{drift method} 
+  \end{wideitemize}  
+\end{frame}
+
+
+
+\begin{frame}{Second-Order Differencing}
+
+  Occasionally, the differenced data will not appear stationary and it may be necessary to difference the data a second time:\\
+
+  \medskip
+  
+  \begin{equation*}
+    y''_{t} = y'_t - y'_{t-1} = (y_t - y_{t-1}) - (y_{t-1} - y_{t-2})
+  \end{equation*}
+
+  \medskip
+
+  \begin{itemize}
+  \item $y''_{t}$ will have $T-2$ values
+  \item In practice, it is almost never necessary to go beyond second-order differences
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Seasonal Differencing}
+
+  \begin{block}{Definition: Seasonal Difference}
+    A seasonal difference is the difference between an observation and the corresponding observation from the previous year
+
+    \begin{equation*}
+      y'_t = y_t - y_{t-m}
+    \end{equation*}
+
+    where $m$ = number of seasons
+
+
+    \begin{itemize}
+    \item For monthly data, $m = 12$
+    \item For quarterly data, $m = 4$      
+    \end{itemize}
+    
+  \end{block}
+\end{frame}
+
+
+\begin{frame}{Differencing in Practice}
+
+  When both seasonal and first differences are applied:
+
+  \begin{wideitemize}
+    \item It makes no difference which one is done first - the result will be the same
+    \item If seasonality is strong, we recommend that seasonal differencing be done first because sometimes the resulting series will be stationary and there will be no need for further first difference
+    \item It is important that, if differencing is used, the differences are \textbf{interpretable}: for instance, taking lag 3 differences for yearly data is difficult to interpret
+  \end{wideitemize}
+\end{frame}
+
+
+\begin{frame}{Unit Root Tests}
+  Statistical tests can be used to determine the required order of differencing
+
+  \begin{wideenumerate}
+    \item \textbf{Augmented Dickey Fuller test}: null hypothesis is that the data is non-stationary and non-seasonal
+    \item KPSS (Kwiatkowski-Phillips-Schmidt Shin) test: the null hypothesis is that the data is stationary is non-seasonal
+    \item Other tests are available for seasonal data
+  \end{wideenumerate}
+  
   
 \end{frame}
 
 
 
+\begin{frame}{Backshift Notation}
+
+  \begin{block}{Notation}
+    The backshift notational device, $B$ is used as follows:\\
+
+    \begin{equation*}
+      B y_t = y_{t-1}
+    \end{equation*}
+  \end{block}
+
+    
+    \begin{itemize}
+    \item   $B$ operating on $y_t$ has the effect of \textbf{shifting the data back one period}
+    \item   Two applications of $B$ to $y_t$ shifts the data back \textbf{two periods}
+      \begin{equation*}
+        B(By_t) = B^2 y_t = y_{t-2}
+      \end{equation*}
+    \end{itemize}
+    
+$B$ depends on the period/frequency considered. Shifting monthly data by a year supposes using $B^{12}$
+
+\end{frame}
 
 
+\begin{frame}{Relationship with Differencing}
+  Importantly, the backshift operator is convenient for describing differencing\\
+
+  \medskip
+  
+  \begin{exampleblock}{Backshift Operator and Differencing}
+    $$y'_t = y_t - y_{t-1} = y_t - By_t = (1-B)y_t$$
+  \end{exampleblock}
 
 
+  \begin{itemize}
+    \item Likewise, second-order differences are obtained with: $y''_t = (1-B)^2y_t$  
+    \item Pay attention !! Second-order difference is not second difference 
+      \begin{itemize}
+      \item Second order difference: $(1-B)^2 y_t = y''_t = (y_t - y_{t-1}) - (y_{t-1} - y_{t-2})$
+      \item Second difference: $1-B^2 y_t = y_t - y_{t-2}$
+      \end{itemize}
+  \end{itemize}
+  
+\end{frame}
 
 
+\begin{frame}{Combined Effects}
+
+Assume that you want to combine a first difference with a seasonal difference:
+  
+  \begin{itemize}
+  \item First difference: $(1-B)$
+  \item Seasonal difference: $(1-B^m)$
+  \end{itemize}
+
+  Then, the backshift operator can be directly combined, as a polynomial, to represent the resulting time series:
+
+  \begin{equation*}
+    (1-B)(1-B^m)y_t = (1 - B - B^m + B^{m+1})y_t = y_t - y_{t-1} - y_{t-m} + y_{t-m-1}
+  \end{equation*}    
+\end{frame}
 
 
-
+\section{Autoregressive Models}
 
 
 
