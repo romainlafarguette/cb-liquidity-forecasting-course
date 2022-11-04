@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-04 05:11:40 ubuntu>
+% Time-stamp: <2022-11-04 09:56:55 ubuntu>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -135,27 +135,28 @@
 \section{ETS Model}
 
 
-\begin{frame}{Simple Exponential Smoothing}
-Simple exponential smoothing is a weighted average of past observations, with weights decreasing exponentially
+% \begin{frame}{Simple Exponential Smoothing}
+% Simple exponential smoothing is a weighted average of past observations, with weights decreasing exponentially
 
-\begin{equation*}
-  y_{t+1} = \alpha y_t + \alpha(1-\alpha) y_{t-1} + \alpha(1-\alpha)^2 y_{t-2} + \dots 
-\end{equation*}
+% \begin{equation*}
+%   y_{t+1} = \alpha y_t + \alpha(1-\alpha) y_{t-1} + \alpha(1-\alpha)^2 y_{t-2} + \dots \qquad \text{where} \ \alpha \ \in \ [0, 1]
+% \end{equation*}
 
-\begin{itemize}
-\item More advanced specifications allow for trends, seasonality, etc.
-\end{itemize}
+% \begin{itemize}
+% \item More advanced specifications allow for trends, seasonality, etc.
+% \end{itemize}
 
 
-\end{frame}
+% \end{frame}
 
 
 \begin{frame}
-  \frametitle{From Simple Exponential Smoothing to ETS}
+  \frametitle{Perspective}
   
   \begin{itemize}
   \item ETS (Error, Trend, Season) model was developed in the 1950s as algorithms to produce point forecasts
   \item ETS combines a "level" ($l_{t-1}$), a "trend" (($b_{t-1}$)) and a "seasonal" ($s_{t-m}$) components to describe a time series
+  \item The combination $f(l_{t-1}, b_{t-1}, s_{t-m})$ can be additive, multiplicative, etc.
   \item The rate of change of the components are controlled by "smoothing" parameters: $\alpha$ for the level, $\beta$ for the trend, $\gamma$ for the seasonal
   \item The researcher has to:
     \begin{enumerate}
@@ -181,8 +182,237 @@ Simple exponential smoothing is a weighted average of past observations, with we
   \item \textbf{Multiplicatively:} $y_t = l_{t-1} \times b_{t-1} \times s_{t-m} \times (1 + \epsilon_t)$
   \item \textbf{Mixed:} $y_t = (l_{t-1} + b_{t-1}) \times s_{t-m} + \epsilon_t $  
   \end{itemize}
+
+  Notations:
+  \begin{itemize}
+  \item \textbf{Error} can be additive ("A") or multiplicative ("M")
+  \item \textbf{Trend} can be None ("N"), additive ("A"), multiplicative ("M") or damped ("Ad" or "Md")
+  \item Seasonality can be None ("N"), additive ("A") or multiplicative ("M")
+  \end{itemize}
+    
+\end{frame}
+
+
+\begin{frame}{Point forecasts and forecast distribution}
+
+  \begin{itemize}
+  \item Models generates point forecasts estimates, based on a given conditional value $y_{t+1|y0} = f_y(y0)$ 
+  \item However, need to generate the forecast distribution to assess the quality of models and select the best. \textbf{Model selection}
+  \item A stochastic data generating process (DGP) can generate an entire forecast distribution
+  \item Core idea: the residual ($\epsilon$) is the only stochastic (=random) element in $y_t = l_{t-1} + b_{t-1} + s_{t-m} + \epsilon_t$
+    \begin{itemize}
+    \item Hence, the distribution of the residuals will determine the distribution of the estimator
+    \end{itemize}
+  \end{itemize}
+
+
   
 \end{frame}
+
+\section{Additive Models}
+\begin{frame}{Level-Only Model ETS(A, N, N) (Simple Smoothing)}
+  \begin{block}{Component Form}
+    \begin{itemize}
+    \item Forecast equation: $\hat{y}_{t+h |t} = l_t$
+    \item Smoothing equation: $l_t = \alpha y_t + (1-\alpha)l_{t-1}$
+    \end{itemize}
+  \end{block}
+
+  \begin{itemize}
+  \item $l_t$ is the level (="smoothed value") of the series at time $t$
+  \item $\hat{y}_{t+1|t} = \alpha y_t + (1 - \alpha)\hat{y}_{t|t-1}$
+  \end{itemize}
+  Iterate to get exponentially weighted moving average form: $\hat{y}_{T+1|T} = \sum_{j=0}^{T-1}\alpha(1-\alpha)^j y_{T-j} + (1-\alpha)^Tl_0$  
+\end{frame}
+
+\begin{frame}{Error Correction Form}
+  \begin{exampleblock}{Component Form}
+    \begin{itemize}
+    \item Forecast equation: $\hat{y}_{t+h |t} = l_t$
+    \item Smoothing equation: $l_t = \alpha y_t + (1-\alpha)l_{t-1}$
+    \end{itemize}
+  \end{exampleblock}
+
+  Forecast error: $e_t = y_t - \hat{y}_{t|t-1} = y_t - l_{t-1}$
+  
+  \begin{block}{Error Correction Form}
+    \begin{itemize}
+    \item $y_t = l_{t-1} + e_t$
+    \item $l_t = l_{t-1} + \alpha*\underbrace{(y_t - l_{t-1})}_{e_t}$
+    \end{itemize}
+
+    \begin{itemize}
+    \item Intuition: $\alpha$ updates the next-period estimate based on the forecasting error
+    \item Specify probability distribution for $e_t$, often assumed that $e_t = \epsilon_t \sim \mathcal{N}(0, \sigma^2)$
+    \end{itemize}
+           
+  \end{block}
+  
+\end{frame}
+
+
+\begin{frame}
+  \begin{itemize}
+  \item Need to choose the best values for $\alpha$ and $l_0$
+  \item Similarly to regression, choose optimal parameters by minimizing SSE:
+    \begin{equation*}
+      \text{SSE} = \sum_{t=1}^T (y_t - \hat{y}_{t|t-1})^2
+    \end{equation*}
+  \item Unlike regression, there is no closed form solution: need to use numerical optimization
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{State-Space Representation for Additive Models}
+  \begin{block}{State-Space Representation}
+    \begin{itemize}
+    \item \textbf{Measurement equation}: $y_t = l_{t-1} + \epsilon_t$, where $\epsilon_t \sim \mathcal{N}(0, \sigma^2)$
+      \begin{itemize}
+      \item The measurement equation is the relationship between observations ($y_t$) and state (=structure) $l_t$
+      \end{itemize}
+    \item \textbf{State equation} $l_t = l_{t-1} + \alpha*\epsilon_t$, where $\epsilon_t \sim \mathcal{N}(0, \sigma^2)$
+      \begin{itemize}
+      \item The state equation is evolution of the state variable ($l_t$) through time
+      \end{itemize}
+     \end{itemize}
+  \end{block}
+
+
+  \begin{itemize}
+  \item Both equations have the same error process $\epsilon$
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{State-Space Representation for Multiplicative Models}
+  \begin{itemize}
+  \item Instead of differential errors, specify relative errors: $\eta_t = \frac{y_t - \hat{y}_{t|t-1}}{ \hat{y}_{t|t-1}}$
+  \item Some easy algebra, substituting $\hat{y}_{t|t-1} = l_{t-1}$ gives   
+  \end{itemize}
+
+  \begin{block}{State-Space Representation}
+    \begin{itemize}
+    \item \textbf{Measurement equation}: $y_t = l_{t-1}(1+\epsilon_t)$
+    \item \textbf{State equation}: $l_t = l_{t-1}(1+\alpha*\epsilon_t)$
+    \end{itemize}
+  \end{block}
+
+Implication: Models with additivative and multiplicative errors with the same parameters generate \textbf{the same point forecasts but with different prediction intervals}
+  
+\end{frame}
+
+% Add a few charts
+
+
+\section{Models with Trend}
+
+\begin{frame}{Holt's Linear Trend}
+
+  \begin{block}{Component Form}
+    \begin{itemize}
+    \item Level: $l_t = \alpha_t + (1-\alpha)(l_{t-1}+ b_{t-1})$
+    \item Trend: $b_t = \beta*(l_t - l_{t-1}) + (1-\beta)b_{t-1}$
+    \item Forecast: $\hat{y}_{t+h|t}=  l_t + hb_t$
+    \end{itemize}
+  \end{block}
+
+  \begin{itemize}
+  \item Two smoothing parameters: $\alpha$ and $\beta$ ($0 \leq \alpha, \ \beta \leq 1$)
+  \item $l_t$ level: weighted average between $y_t$ and one-step ahead forecast for time $t$: $l_{t-1} + b_{t-1} = \hat{y}_{t|t-1}$
+  \item $b_t$ slope: weighted average of $(l_t - l_{t-1})$ and $b_{t-1}$, current and previous estimate of slope
+  \item Choose $\alpha, \ \beta, \ l_0, \ b_0$ to mininize the SSE (sum squared errors)
+  \end{itemize}
+\end{frame}
+
+% Add a few charts
+
+
+
+\begin{frame}{Damped Trend Method}
+
+  \begin{block}{Component Form}
+    \begin{itemize}
+    \item $l_t = \alpha y_t + (1-\alpha)(l_{t-1} + \phi b_{t-1})$
+    \item $b_t = \beta*(l_t - l_{t-1}) + (1-\beta)\phi b_{t-1}$
+    \item $\hat{y}_{t+h|t} = l_t + (\phi + \phi^2 + \dots + \phi^h)b_t$
+    \end{itemize}
+  \end{block}
+
+  \begin{itemize}
+  \item $\phi$ is the damping parameter, $0 \leq \phi \leq 1$
+  \item If $\phi=1$, the method boils down to Holt's linear trend
+  \item As $h \to \infty$, then $\hat{y}_{T+h|T} \ \to \ l_T + \frac{\phi b_T}{1-\phi}$
+  \item Application: short-run forecasts are trended, long-run forecasts constant
+  \end{itemize}
+  
+  
+\end{frame}
+
+
+\begin{frame}{Holt-Winters Seasonal Model}
+
+  Holt and Winters extended Holt's method to capture seasonality
+  
+  \begin{block}{Component Form}
+    \begin{itemize}
+    \item Level: $l_t = \alpha (y_t - s_{t-m}) + (1- \alpha )(l_{t-1} + b_{t-1})$
+    \item Trend: $b_t = \beta(l_t - l_{t-1}) + (1-\beta)b_{t-1}$
+    \item Season: $\gamma(y_t - l_{t-1} - b_{t-1}) + (1-\gamma)s_{t-m}$
+    \item Forecast: $\hat{y}_{t+h|t} = l_t + hb_t + s_{t+h - m(k+1)}$
+    \end{itemize}
+  \end{block}
+
+  \begin{itemize}
+  \item $m$ is the period of seasonality (e.g. $m = 4$ for quarterly data)
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Seasonal Component}
+  \begin{itemize}
+  \item The seasonal component is usually expressed as:
+    \begin{equation*}
+      s_t = \gamma*(y_t - l_t) + (1-\gamma)*s_{t-m} \qquad 0 \ \leq \ \gamma \ \leq 1
+    \end{equation*}
+  \item By subtitution, we can derive the dynamic of the seasonal term as:
+    \begin{equation*}
+      s_t = \gamma*(1-\alpha)(y_t - l_{t-1} - b_{t-1}) + [1 - \gamma(1-\alpha)] s_{t-m}
+    \end{equation*}
+  \end{itemize}  
+\end{frame}
+
+
+
+
+\begin{frame}{Forecasting with ETS models}
+\textbf{Traditional point forecasts}: iterate the equations for $t = T+1, T+2, \dots, T+h$. By construction, $\epsilon_t = 0 \ \forall \ t>T$
+
+\begin{itemize}
+\item Equals to $E[y_{t+h}|x_t]$ in the case of additive seasonality only
+\item Point forecasts for additive ETS are the same as for multiplicative ETS if the parameters are the same
+\end{itemize}
+  
+\end{frame}
+
+
+
+\begin{frame}{Prediction Intervals}
+
+  \begin{itemize}
+  \item They can only be generated using the models
+  \item The prediction intervals will differ between models with additive and multiplicative errors
+  \item Some simple ETS models offer exact formula
+  \item For more complex ETS models, the only solution for generating the confidence intervals is by bootstrapping
+    \begin{itemize}
+    \item Simulate future sample paths, conditional on the last estimates of the states
+    \item Obtain the prediction intervals from the percentiles of these simulated future paths
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
 
 
 
@@ -210,10 +440,38 @@ Simple exponential smoothing is a weighted average of past observations, with we
 \end{frame}
 
 
+\section{ARIMA Model}
 
 
+\begin{frame}{ARIMA Model}
 
-\section{ARMA Model}
+  \begin{itemize}
+  \item AR: autoregressive (lagged observations as inputs)
+  \item I: integrated (differencing to make series stationary)
+  \item MA: moving average (lagged errors as inputs)
+  \end{itemize}
+
+  \begin{exampleblock}
+    Contrary to an ETS, an ARIMA model is rarely interpretable in terms of visible data structures like trend and seasonality. But it can capture a huge range of time series patterns
+  \end{exampleblock}  
+\end{frame}
+
+
+\begin{frame}{Refresher: Intuitive Definition of Stationarity}
+
+  \begin{block}{Intuitive Characterization}
+    If ${y_t}$ is a stationary time series, then for any period $s$ in the future, the distribution $\{y_t, \dots, y_{t+s}\}$ doesn't depend on $t$
+  \end{block}
+
+  A \textbf{stationary series} is:
+  \begin{itemize}
+  \item Roughly horizontal
+  \item Constant variance
+  \item No predictable patterns in the long term
+  \end{itemize}
+  
+\end{frame}
+
 
 
 
