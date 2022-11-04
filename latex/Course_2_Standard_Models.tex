@@ -1,0 +1,241 @@
+% Time-stamp: <2022-11-04 05:11:40 ubuntu>
+% Romain Lafarguette 2020, https://romainlafarguette.github.io/
+
+%% ---------------------------------------------------------------------------
+%% Preamble: Packages and Setup
+%% ---------------------------------------------------------------------------
+% Class 
+\documentclass{beamer}
+
+% Theme
+\usetheme{Boadilla}
+\usecolortheme{dolphin}
+%\setbeamertemplate{headline}{} % Remove the top navigation bar
+
+% Font and encoding
+\usepackage[utf8]{inputenc} % Input font
+\usepackage[T1]{fontenc} % Output font
+\usepackage{lmodern} % Standard LateX font
+\usefonttheme{serif} % Standard LateX font
+
+% Maths 
+\usepackage{amsfonts, amsmath, mathabx, bm, bbm} % Maths Fonts
+
+% Graphics
+\usepackage{graphicx} % Insert graphics
+\usepackage{subfig} % Multiple figures in one graphic
+\graphicspath{{/../static/img}{/../static/diagrams}{/../static/course_1_img}}
+
+% Layout
+\usepackage{changepage}
+
+% Colors
+\usepackage{xcolor}
+\definecolor{imfblue}{RGB}{0,76,151} % Official IMF color
+\setbeamercolor{title}{fg=imfblue}
+\setbeamercolor{frametitle}{fg=imfblue}
+\setbeamercolor{structure}{fg=imfblue}
+\setbeamercolor{page number in head/foot}{fg=imfblue}
+\setbeamerfont{page number in head/foot}{size=\footnotesize}
+
+% Tables
+\usepackage{booktabs,rotating,multirow} % Tabular rules and other macros
+\usepackage{pdflscape,afterpage} % Landscape mode and afterpage
+\usepackage{threeparttable} % Split long tables
+\usepackage[font=scriptsize,labelfont=scriptsize,labelfont={color=imfblue}]{caption}
+
+% Import files
+\usepackage{import}
+
+% Appendix slides
+\usepackage{appendixnumberbeamer} % Manage page numbers for appendix slides
+
+% References
+\usepackage{hyperref}
+
+% A few macros: environments
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{10pt}}{\enditemize}
+\newenvironment{wideenumerate}{\enumerate\addtolength{\itemsep}{10pt}}{\endenumerate}
+
+\newenvironment{extrawideitemize}{\itemize\addtolength{\itemsep}{30pt}}{\enditemize}
+\newenvironment{extrawideenumerate}{\enumerate\addtolength{\itemsep}{30pt}}{\endenumerate}
+
+% Define the footer with higher/lower adjustment
+\defbeamertemplate{footline}{higher page number}
+{
+  \hfill
+  \usebeamercolor[fg]{page number in head/foot}
+  \usebeamerfont{page number in head/foot}  
+  \thepage/\inserttotalframenumber\kern1em\vskip2pt %Change xxpt to
+                                %lower/higher the footnote
+}
+\setbeamertemplate{footline}[higher page number]
+
+% Remove navigation symbols and other superfluous elements
+\setbeamertemplate{navigation symbols}{}
+\setbeameroption{hide notes}
+\setbeamertemplate{note page}[plain]
+\beamertemplatenavigationsymbolsempty
+\hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
+
+% Institute font
+\setbeamerfont{institute}{size=\footnotesize}
+\DeclareMathSizes{10}{9}{7}{5}  
+
+%% ---------------------------------------------------------------------------
+%% Title info
+%% ---------------------------------------------------------------------------
+\title[Concepts]{Core Concepts in Financial Econometrics}
+\author[R. Lafarguette]{Romain Lafarguette, Ph.D.}
+\institute[IMF]{ADIA Quant \& IMF External Consultant}
+
+\date[STI, 08 Nov 2022]{Singapore Training Institute, 08 November 2022}
+
+\titlegraphic{
+    \begin{figure}
+    \centering
+    \subfloat{{\includegraphics[width=2cm]{../static/img/imf_logo}}}%
+    \end{figure}
+}
+
+%% ---------------------------------------------------------------------------
+%% Title slide
+%% ---------------------------------------------------------------------------
+\begin{document}
+
+\begingroup
+\renewcommand{\insertframenumber}{}
+\begin{frame}
+  %\addtocounter{framenumber}{-1}
+\maketitle
+\end{frame}
+\endgroup
+
+
+% \begin{frame}
+%   \frametitle{Outline}
+
+%   This short crash-course is divided in three parts covering:\\
+%   \smallskip
+  
+%   \begin{enumerate}
+%   \item \textbf{Data concepts}: population, sample, data types, data generating process, etc.
+%   \item \textbf{Statistical Inference}: stochastic process, estimator, distributions, convergence, etc.
+%   \item \textbf{Statistical Properties of Financial Time Series}: stationarity, autocorrelation, heavy tails, etc.
+%   \end{enumerate}
+
+
+% \smallskip
+% \emph{NB: this slide-deck follows the excellent course of Christophe Hurlin \url{https://sites.google.com/view/christophe-hurlin/teaching-resources}}  
+% \end{frame}
+
+
+
+
+\section{ETS Model}
+
+
+\begin{frame}{Simple Exponential Smoothing}
+Simple exponential smoothing is a weighted average of past observations, with weights decreasing exponentially
+
+\begin{equation*}
+  y_{t+1} = \alpha y_t + \alpha(1-\alpha) y_{t-1} + \alpha(1-\alpha)^2 y_{t-2} + \dots 
+\end{equation*}
+
+\begin{itemize}
+\item More advanced specifications allow for trends, seasonality, etc.
+\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{From Simple Exponential Smoothing to ETS}
+  
+  \begin{itemize}
+  \item ETS (Error, Trend, Season) model was developed in the 1950s as algorithms to produce point forecasts
+  \item ETS combines a "level" ($l_{t-1}$), a "trend" (($b_{t-1}$)) and a "seasonal" ($s_{t-m}$) components to describe a time series
+  \item The rate of change of the components are controlled by "smoothing" parameters: $\alpha$ for the level, $\beta$ for the trend, $\gamma$ for the seasonal
+  \item The researcher has to:
+    \begin{enumerate}
+    \item To choose the best values for the smoothing parameters 
+    \item The initial state of the parameters
+    \end{enumerate}
+  \item Equivalent ETS state-space models have been developped in the 1990s and the 2000s
+  \end{itemize}
+
+% Under the simplest, additive specification:
+%   \begin{equation*}
+%     x_t = l_{t-1} + b_{t-1} + s_{t-m} + \epsilon_t
+%   \end{equation*}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Combining Level, Trend and Seasonal Components}
+
+  \begin{itemize}
+  \item \textbf{Additively:} $y_t = l_{t-1} + b_{t-1} + s_{t-m} + \epsilon_t$
+  \item \textbf{Multiplicatively:} $y_t = l_{t-1} \times b_{t-1} \times s_{t-m} \times (1 + \epsilon_t)$
+  \item \textbf{Mixed:} $y_t = (l_{t-1} + b_{t-1}) \times s_{t-m} + \epsilon_t $  
+  \end{itemize}
+  
+\end{frame}
+
+
+
+
+\begin{frame}
+  \frametitle{Main Idea: Control the Rate of Change}
+
+  \begin{itemize}
+  \item $\alpha$ controls the flexibility of the \textbf{level}
+    \begin{itemize}
+    \item If $\alpha = 0$, the level never updates (stays at the mean)
+    \item If $\alpha = 1$, the level updates completely (naive, start from yesterday)
+    \end{itemize}
+  \item $\beta$ controls the flexibility of the \textbf{trend}
+    \item If $\beta = 0$, the trend is linear
+    \item If $\beta = 1$, the trend changes suddenly at each observation
+    
+    \item $\gamma$ controls the flexibility of the \textbf{seasonality}
+      \begin{itemize}
+      \item If $\gamma = 0$ the seasonality is fixed (seasonal mean)
+      \item If $\gamma = 1$ the seasonality updates completely (seasonal naive)        
+      \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+
+
+
+
+\section{ARMA Model}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

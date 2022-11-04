@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-03 16:33:04 ubuntu>
+% Time-stamp: <2022-11-04 04:29:42 ubuntu>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -6,6 +6,11 @@
 %% ---------------------------------------------------------------------------
 % Class 
 \documentclass{beamer}
+
+% Theme
+\usetheme{Boadilla}
+\usecolortheme{dolphin}
+%\setbeamertemplate{headline}{} % Remove the top navigation bar
 
 % Font and encoding
 \usepackage[utf8]{inputenc} % Input font
@@ -80,9 +85,9 @@
 %% ---------------------------------------------------------------------------
 %% Title info
 %% ---------------------------------------------------------------------------
-\title[Concepts]{Introduction to Time Series Econometrics}
+\title[Concepts]{Core Concepts in Financial Econometrics}
 \author[R. Lafarguette]{Romain Lafarguette, Ph.D.}
-\institute[IMF]{Quant \& IMF External Consultant}
+\institute[IMF]{ADIA Quant \& IMF External Consultant}
 
 \date[STI, 08 Nov 2022]{Singapore Training Institute, 08 November 2022}
 
@@ -121,7 +126,7 @@
 
 
 \smallskip
-\emph{NB: this slide-deck follows the excellent course of \url{https://sites.google.com/view/christophe-hurlin/teaching-resources}{Christophe Hurlin}}  
+\emph{NB: this slide-deck follows the excellent course of Christophe Hurlin \url{https://sites.google.com/view/christophe-hurlin/teaching-resources}}  
 \end{frame}
 
 
@@ -346,23 +351,31 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
     The probability distribution of a random variable describes how the probabilities of the outcomes are distributed. How more likely is one outcome compared to another? Is there more upside risk or downside risk? Etc.
   \end{block}
 
-  Distributions are equivalently represented by:
+\medskip
+  
+  Distributions are equivalently represented by their:
   \begin{enumerate}
   \item \textbf{The probability density function (pdf)}
-  \item \textbf{The cumulative density function (pdf)}  
-  \end{enumerate}
-
+  \item \textbf{The cumulative distribution function (cdf)}  
+  \end{enumerate}    
+  
+  The pdf is also necessary to define distributions' moments (see after).\\  
 \end{frame}
   
 \begin{frame}
   \begin{itemize}
   \item \textbf{The probability density function (pdf)} usually denoted $f_X(x0)$ (remember than $X$ stands for the random variable, while $x0$ stands for a realization of the random variable) represents the relatively likelihood that the random variable $X$ will fall within a small neighborhood of $x0$ (infinitesimal concept). It is easier to conceptualize the pdf via the cdf
-  \item \textbf{The cumulative density function (cdf)} usually denoted $F_X(x0)$ represents the probability that the random variable will be lower than $x0$. It cumulates the pdf ("all the small neighborhoods") such that:
+  \item \textbf{The cumulative distribution function (cdf)} usually denoted $F_X(x0)$ represents the probability that the random variable will be lower than $x0$. It cumulates the pdf ("all the small neighborhoods") such that:
     \begin{equation*}
 F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh      
     \end{equation*}    
-  \end{itemize}
-  
+  \end{itemize}  
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Link between PDF and CDF}
+    \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/pdf and cdf.png}}
 \end{frame}
 
 
@@ -449,8 +462,7 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
   \begin{frame}
     \frametitle{Point Estimate}
     \begin{block}{Definition: Estimate}
-      An estimate is the realized value of an estimator (e.g. a number, in a case of a point estimate) that is obtained when a sample is actually taken.\\
-      For an estimator $\hat{\theta}$, it can be denoted by $\hat{\theta}(y)$
+      An estimate is the realized value of an estimator (e.g. a number, in a case of a point estimate) that is obtained for a particular value $x0$. Often noted as $\hat{\theta}(x0)$ for the estimator $\hat{\theta}$
     \end{block}
 
     \begin{exampleblock}{Estimate of a linear regression}
@@ -665,12 +677,23 @@ X_t \ \overset{d}{\to} \ X \quad \Leftrightarrow \quad  F_T(x) = F(x) \qquad \ \
    \item $\mathbb{E}(X_t) = \mu \ \quad \forall \ t \ \in \ \mathbb{Z}$ doesn't depend on $t$
    \item $\text{Cov}(x_t, x_{t+h}) \ = \ \mathbb{E}[(x_{t+h} - m)(x_t - m)] \ = \ \gamma_h \quad \forall \ (t, h) \ \in \ \mathbb{Z}^2$ desn't depend on $t$
    \end{itemize}
-
-   Weak stationarity means that the stochastic process oscillates around a constant level, is not trended, and their correlation over time is independent from the period studied. Technically, we say that the \textbf{first two moments are time-invariant}.\\
    
  \end{block}
  
 \end{frame}
+
+
+% \begin{frame}
+%   \frametitle{Intuitive Interpretation}
+%    Weak stationarity means that the stochastic process oscillates around a constant level, is not trended and has the following properties:\\
+  
+%   \begin{enumerate}
+%   \item The first two moments are constant over time
+%     \begin{equation*}
+% \mathbb{E}(X_t)
+%     \end{equation*}
+%   \end{enumerate}
+% \end{frame}
 
 
 \begin{frame}
@@ -730,7 +753,171 @@ where $\hat{\sigma^2}$ and $\hat{\mu}$ are consistent estimators of $\mu = \math
 
 
 
+\begin{frame}
+  \frametitle{Asymmetry}
+
+  \begin{block}{Stylized Fact: Heavy Tails}
+    The distribution of many financial variables, including asset returns, are often \textbf{asymmetric} and \textbf{negatively skewed}
+  \end{block}
+
+  \begin{itemize}
+  \item Asymmetry is defined by the skewness, which is the third-order moment (see before)
+  \item This reflects the fact that the downturns of financial markets are often much steeper than the recoveries
+  \item Investors tend to react more strongly to negative news that to positive news 
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Skewness}
+  There are different shapes of kurtosis 
+ \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/skewness.PNG}}  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Heavy Tails}
+  \begin{exampleblock}{Fact: Heavy Tails}
+    The probability distribution of many financial variables, including asset returns, often exhibit \textbf{heavier tails} than those of a normal distribution
+  \end{exampleblock}
+
+  \begin{itemize}
+  \item "Heavier tails" are rigorously defined by the kurtosis, which is the fourth-order moment (see before)
+  \item Mandelbrot (1963) recognized the heavy-tailed, highly peaked nature of certain financial time series
+  \item These heavy tails can be explained by risk aversion, heard behavior, market microstructure (illiquidity, asymmetric information, etc.)
+  \end{itemize}    
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Normal versus Tails}
+  There are different shapes of kurtosis 
+
+ \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/normal versus tails.PNG}}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Forms of Kurtosis (Fat Tails)}
+  There are different shapes of kurtosis:\\ 
+ \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/forms of kurtosis.PNG}}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Volatility Clustering}
+  \begin{block}{Definition: Volatility Clustering}
+    \begin{itemize}
+    \item \textbf{Volatility clustering} means that large price changes (i.e. returns with large absolute values or large squares) occur in clusters
+    \item Large price changes tend to be followed by large price changes (up and down)
+    \item Periods of tranquility alternate with periods of high volatility (volatility regimes)
+    \end{itemize}
+    
+    \emph{Note: volatility clustering is the consequence of the autocorrelation of the squared returns}\\
+    
+  \end{block}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Volatility Regimes: US VIX}
+  The VIX is the implied volatility fo the US SP 500:\\ 
+ \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/vix volatility.PNG}}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Aggregational Gaussianity}
+
+  \begin{block}{Definition: Aggregational Gaussianity}
+    \begin{itemize}
+    \item Asset returns over $k$ days is simply the aggregation of $k$ daily returns
+    \item When the time horizon $k$ increases, the central limit theory says that the distribution of returns over a long-time horizon (a few months) tends toward a \textbf{normal distribution}
+    \end{itemize}
+  \end{block}
+
+
+  \begin{itemize}
+  \item Aggregational gaussianity implies that over long horizons, the pecularities of financial time series over short-term horizon (skewness, kurtosis, etc.) tend to vanish
+  \item However, in finance, people are mostly interested in relatively short-term movements, suggesting that working under the gaussianity assumption is often not appropriate
+  \end{itemize}
   
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Aggregational Gaussanity In Practice}
+  The VIX is the implied volatility fo the US SP 500:\\ 
+ \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/aggregational gaussianity.PNG}}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Long Range Dependence}
+  \begin{block}{Definition}
+    \begin{itemize}
+    \item At the difference of log returns or standard returns, daily squared returns and absolute returns often exhibit significant autocorrelations
+    \item Those autocorrelations are persistent, indicating possible \textbf{long-memory} properties
+    \end{itemize}
+  \end{block}
+
+\emph{Those autocorrelations become weaker and less persistent when the sampling interval is increased to a week or a month}\\
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Long Range Dependence}
+  SP 500 Returns (left) and squared returns (right) \\
+
+\medskip
+  
+ \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/long range dependence.PNG}}  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{The ARCH effect}
+  \begin{itemize}
+  \item The autocorrelation of the squared returns is called the \textbf{ARCH effect} (auto-regressive conditional heteroskedasticity)
+  \item It is most important with daily returns, and less important with low frequency returns (monthly, quarterly, etc.)
+  \end{itemize}
+
+\medskip
+  
+ARCH effect is important in finance, because it describes patterns on the dynamic of financial volatility 
+  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Leverage Effect}
+
+  \begin{block}{Definition: the Leverage Effect}
+    \begin{itemize}
+    \item Assets returns are negatively correlated with the changes in their volatilities
+    \item This negative correlation $\text{Corr (returns, vol)}$ is called the \textbf{leverage effect}
+    \end{itemize}
+
+Financial explanations
+    \begin{itemize}
+    \item An asset price declines, companies mechanically become more leveraged (debt-to-equity ratio up) and riskier: therefore, their stock prices become more volatile
+    \item On the other hand, when stock prices become more volatile, investors demand high returns and hence stock prices go down
+    \item Volatilities caused by price decline are typically larger than prices appreciation due to declined volatilities
+    \end{itemize}
+    
+  \end{block}
+  
+\end{frame}
+
+
+
+
+
 \end{document}
 
 
@@ -764,27 +951,13 @@ where $\hat{\sigma^2}$ and $\hat{\mu}$ are consistent estimators of $\mu = \math
 
 
 \begin{frame}
-  \frametitle{Stationarity}
-  
-\end{frame}
-
-
-\begin{frame}
   \frametitle{Ergodicity}
   
 \end{frame}
 
 
-
 \begin{frame}
-  \frametitle{Estimator}
-  
-\end{frame}
-
-
-
-\begin{frame}
-  \frametitle{Biais}
+  \frametitle{Biais Variance Tradeoff}
   
 \end{frame}
 
@@ -793,6 +966,14 @@ where $\hat{\sigma^2}$ and $\hat{\mu}$ are consistent estimators of $\mu = \math
   \frametitle{Efficiency}
   
 \end{frame}
+
+
+\begin{frame}
+  \frametitle{Simson Paradox}
+  
+\end{frame}
+
+
 
 
 
