@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-05 15:08:02 A13258Q>
+% Time-stamp: <2022-11-06 00:39:45 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 % Graphics
 \usepackage{graphicx} % Insert graphics
 \usepackage{subfig} % Multiple figures in one graphic
-\graphicspath{{/../static/img}{/../static/diagrams}{/../static/course_1_img}}
+\graphicspath{{/../static/img}{/../static/diagrams}}
 
 % Layout
 \usepackage{changepage}
@@ -35,13 +35,11 @@
 \setbeamercolor{title}{fg=imfblue}
 \setbeamercolor{frametitle}{fg=imfblue}
 \setbeamercolor{structure}{fg=imfblue}
-\setbeamercolor{page number in head/foot}{fg=imfblue}
-\setbeamerfont{page number in head/foot}{size=\footnotesize}
 
 % Tables
 \usepackage{booktabs,rotating,multirow} % Tabular rules and other macros
-\usepackage{pdflscape,afterpage} % Landscape mode and afterpage
-\usepackage{threeparttable} % Split long tables
+%\usepackage{pdflscape,afterpage} % Landscape mode and afterpage
+%\usepackage{threeparttable} % Split long tables
 \usepackage[font=scriptsize,labelfont=scriptsize,labelfont={color=imfblue}]{caption}
 
 % Import files
@@ -59,17 +57,6 @@
 
 \newenvironment{extrawideitemize}{\itemize\addtolength{\itemsep}{30pt}}{\enditemize}
 \newenvironment{extrawideenumerate}{\enumerate\addtolength{\itemsep}{30pt}}{\endenumerate}
-
-% Define the footer with higher/lower adjustment
-% \defbeamertemplate{footline}{higher page number}
-% {
-%   \hfill
-%   \usebeamercolor[fg]{page number in head/foot}
-%   \usebeamerfont{page number in head/foot}  
-%   \thepage/\inserttotalframenumber\kern1em\vskip2pt %Change xxpt to
-%                                 %lower/higher the footnote
-% }
-% \setbeamertemplate{footline}[higher page number]
 
 % Remove navigation symbols and other superfluous elements
 \setbeamertemplate{navigation symbols}{}
@@ -108,25 +95,7 @@
 \maketitle
 \end{frame}
 
-% \begin{frame}
-%   \frametitle{Outline}
-
-%   This short crash-course is divided in three parts covering:\\
-%   \smallskip
-  
-%   \begin{enumerate}
-%   \item \textbf{Data concepts}: population, sample, data types, data generating process, etc.
-%   \item \textbf{Statistical Inference}: stochastic process, estimator, distributions, convergence, etc.
-%   \item \textbf{Statistical Properties of Financial Time Series}: stationarity, autocorrelation, heavy tails, etc.
-%   \end{enumerate}
-
-
-% \smallskip
-% \emph{NB: this slide-deck follows the excellent course of Christophe Hurlin \url{https://sites.google.com/view/christophe-hurlin/teaching-resources}}  
-% \end{frame}
-
-
-
+% Would need a introduction
 
 \section{ETS Model}
 
@@ -432,6 +401,24 @@ Implication: Models with additivative and multiplicative errors with the same pa
   
 \end{frame}
 
+\begin{frame}
+  \frametitle{Stability and Forecastability}
+  \begin{wideitemize}
+  \item Stability and forecastability have deep mathematical implications that I will only explain intuitively
+    \begin{itemize}
+    \item \textbf{Stability:} the weights of the observations decay over time, guaranteeing that the newer ones will have higher weights than old one.
+      \begin{itemize}
+      \item \emph{This is the core principle behind exponential weights: the model captures information update as time goes through}. 
+      \end{itemize}      
+    \item \textbf{Forecastability:} The forecastability does not guarantee that the weights decay, but it guarantees that the initial value of the state vector will have a constant impact on forecasts, i.e. will not increase in weight with the increase of the forecast horizon.
+      \begin{itemize}
+      \item \emph{Forecastability is a variation around the concept of ergodicity: it implies that, as the model embedds new observations, the impact of "old information" from the old observations does not "pollute" the new information brought by the new observations. In other words, the model is "learning" relevant information }
+      \end{itemize}
+    \end{itemize}
+    \item These concepts are mathematically rigorously defined. For more information, please refer to Hyndman open-source manual \url{https://otexts.com/fpp3/}
+  \end{wideitemize}
+\end{frame}
+
 
 \section{ARIMA Model}
 
@@ -487,7 +474,21 @@ Implication: Models with additivative and multiplicative errors with the same pa
 \end{frame}
 
 
-% Put a bunch of charts
+\begin{frame}
+  \frametitle{Stationary?}
+     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/google_price.PNG}}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Stationary?}
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/google_price_first_diff.PNG}}  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Stationary?}
+     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/clay_brick.PNG}}  
+\end{frame}
 
 
 \begin{frame}{Differencing}
@@ -672,6 +673,238 @@ Assume that you want to combine a first difference with a seasonal difference:
 
 \section{Autoregressive Models}
 
+\begin{frame}
+  \frametitle{Autoregressive (AR) Models}
+
+  \begin{block}{Definition}
+    \begin{equation*}
+      y_t = c + \phi_1 y_{t-1} + \phi_2 y_{t-2} + \dots + \phi_P y_{t-p} + \epsilon_t
+    \end{equation*}
+
+    \begin{itemize}
+    \item where $\epsilon_t$ is a white noise
+    \item This is a multiple regression with \textbf{lagged variables}
+    \end{itemize}    
+  \end{block}
+
+  \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/ar1_ar2.PNG}}   
+\end{frame}
+
+
+
+
+\begin{frame}
+  \frametitle{AR(1) Model}
+  \begin{block}{Specification}
+    \begin{equation*}
+      y_t = c + \phi_1 y_{t-1} + \epsilon_t
+    \end{equation*}
+  \end{block}
+
+  \begin{itemize}
+  \item When $\phi_1=0$, $y_t$ is equivalent to a \textbf{white noise}
+  \item When $\phi_1=1$ and $c=0$, $y_t$ is equivalent to a \textbf{random walk}
+  \item When $\phi_1=1$ and $c \neq 0$, $y_t$ is equivalent to a \textbf{random walk with drift}
+  \item When $\phi_1<0$ $y_t$ tends to oscillate between positive and negative values 
+  \end{itemize}
+  
+\end{frame}
+
+
+% Add charts
+
+\begin{frame}
+  \frametitle{Stationarity Conditions}
+  To restrict AR models to stationary data, some contraints on the coefficients are needed
+
+  \begin{alertblock}{General Condition for Stationarity}
+    Complex roots of the polynomial $\mathcal{P}(z) = 1 - \phi_1z - \phi_2 z^{2} - \dots \phi_p z^{p}$ lie outside the unit circle of the complex plane
+  \end{alertblock}
+
+  \begin{itemize}
+  \item Intuition: For an AR(1) model, the backshift polynomial is $y_t = \phi_1 y_{t-1} + \epsilon_t \ \leftrightarrow \ y_t(1-\phi_1B) = \epsilon_t$
+  \item $(1-\phi_1B) = 0 \ \leftrightarrow \ B= \underbrace{\frac{1}{\phi_1}}_{\text{Not explosive}}$
+  \item To get the AR expression not explosive, we need $|\frac{1}{\phi_1}| < 1$ and therefore $|\phi_1| > 1$ 
+  \end{itemize}
+
+  For low lags orders, the stationarity conditions are simply:\\
+  
+  \begin{itemize}
+  \item For $p=1$: $-1 < \phi_1 < 1$
+  \item For $p=2$:
+    \begin{itemize}
+    \item $-1 < \phi_2 < 1$
+    \item $ \phi_1 + \phi_2 < 1$ and $ \phi_2 - \phi_1 < 1$
+    \end{itemize}
+  \item More complex conditions hold for $p \geq 3$
+  \item Estimation software (R, Python, Eviews, etc.) takes care of this
+  \end{itemize}
+  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Moving Average Model}
+  \begin{block}{Definition: Moving Average Model}
+    \begin{equation*}
+      y_t = c + \epsilon_t + \theta_1 \epsilon_{t-1} + \theta_2 \epsilon_{t-2} + \dots + \theta_q \epsilon_{t-q}
+    \end{equation*}
+    \begin{itemize}
+    \item $\epsilon_t$ is a white noise
+    \item This is a multiple regression with \textbf{past errors} as predictors
+    \item Do NOT confuse this with \emph{moving average smoothing}!
+    \end{itemize}    
+  \end{block}
+
+  \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/ma1_ma2.PNG}}     
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Wold Decomposition: From AR(p) to MA($\infty$) Model}
+
+  \begin{block}{Wold Decomposition}
+    It is possible to write any \textbf{stationary} AR(p) model as an MA($\infty$)
+  \end{block}
+
+  \begin{itemize}
+  \item Intuitive: just go backward!
+  \item $y_t = \phi_1 \underbrace{y_{t-1}}_{} + \epsilon_t$
+  \item $y_t = \phi_1 (\phi_1 y_{t-1} + \epsilon_{t-1}) + \epsilon_t$ = $\phi_1^2 y_{t-2} + \phi_1\epsilon_{t-1} + \epsilon_t$
+  \item $\dots$
+  \item Providing that $1 < \ \phi_1 \ < 1$:
+    \begin{equation*}
+      y_t = \epsilon_t + \phi_1 \epsilon_{t-1} + \phi_1^2 \epsilon_{t-2} + \phi_1^3 \epsilon_{t-3} + \dots
+    \end{equation*}
+  \end{itemize}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Invertibility: From MA(q) to AR($\infty$)}
+
+  \begin{wideitemize}
+    \item Under certain conditions, an MA(q) process can be written as an AR($\infty$) process
+    \item In this case, the MA model is said to be \textbf{invertible}
+    \item Invertible models have some mathematical properties that make them easier to use in practice
+    \item Invertability of an MA model is equivalent to the \textbf{forecastability} of an ETS model
+      \begin{itemize}
+      \item This is intuitive: AR processes are embedding new information on the most recent lags 
+      \end{itemize}
+  \end{wideitemize}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Invertibility}
+
+  \begin{alertblock}{General Condition for MA(q) Invertibility}
+    Complex roots of $1 + \theta_1z + \theta_2 z^2 + \dots + \theta_q z^q$ lie outside the unit circle of the complex plane
+  \end{alertblock}
+
+  \smallskip
+
+  \begin{itemize}
+  \item For q =1: $-1 \ < \theta_1 \ <1$
+  \item For q=2:
+    \begin{itemize}
+    \item $-1 \ < \theta_2 \ <1$
+    \item $\theta_1 + \theta_2 > -1$ and $\theta_1 - \theta_2 \ < 1$
+    \end{itemize}
+  \item More complicated solutions hold for $q \geq 3$
+  \item Estimation software takes care of this
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{ARMA(p, q) Model}
+  \begin{block}{Specification}
+    \begin{equation*}
+      y_t = c + \underbrace{\phi_1 y_{t-1} + \dots + \phi_p y_{t-p}}_{\text{AR}} + \underbrace{\theta_1 \epsilon_{t-1} + \dots + \theta_q \epsilon_{t-q}}_{\text{MA}} + \epsilon_t
+    \end{equation*}
+  \end{block}
+
+  \medskip
+
+  \begin{itemize}
+  \item The predictors include both \textbf{lagged values of $y_t$} and \textbf{lagged errors}
+  \item Important specification: the future value of the series depends both on the past values it took (dynamic), as well as recent random noise / error term 
+  \item This simple model is "learning" both from the dynamic of the past values and from its inherent randomness
+  \item Conditions on AR coefficients ensure \textbf{stationarity}
+  \item Conditions on MA coefficients ensure \textbf{invertibility}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Autoregressive Integrated Moving Average (ARIMA)}
+
+  ARIMA: AR\textbf{I}MA stands for: Autoregressive \textbf{Integrated} Moving Average model
+
+  \begin{itemize}
+  \item Basically, it is a non-stationary model that can be made stationary by differencing
+  \item $(1-B)^d y_t$ follows an ARMA model: $d$ is the degree of differencing
+  \item Once differenced $d$ times, it is stationary and behaves as an ARMA model
+  \end{itemize}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Generalization}
+
+  \begin{wideitemize}
+  \item $ARIMA(p, d, q)$ where $p$ is the autoregressive order, $d$ the degree of differencing and $q$ the order of the moving average part
+  \item All linear models we discussed are special cases of the ARIMA model:
+    \begin{itemize}
+    \item White noise model: $ARIMA(0, 0, 0)$
+    \item Random walk: $ARIMA(0, 1, 0)$ with no constant
+    \item Random walk with drift: $ARIMA(0, 1, 0)$ with constant  
+    \item $AR(p) = ARIMA(p, 0, 0)$ , $MA(q) = ARIMA(0, 0, q)$
+    \end{itemize}
+  \end{wideitemize}
+    
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Backshift Notation for ARIMA}
+  ARIMA(1, 1, 1) model:
+
+  \begin{equation*}
+    \underbrace{(1-\phi_1B)}_{AR(1)} \ \underbrace{(1-B)y_t}_{\text{First difference}} \quad = \quad c + \underbrace{(1+\theta_1B)\epsilon_t}_{MA(1)}
+  \end{equation*}  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{ARIMA Analysis with Egyptian Exports}
+  \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/egyptian_exports.PNG}}     
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Egyptian Exports Fit}
+  \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/egyptian_exports_fit.PNG}}     
+\end{frame}
+
+\begin{frame}
+  \frametitle{Egyptian Exports Fit Residuals}
+  \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/egyptian_exports_fit_residuals.PNG}}     
+\end{frame}
+
+\begin{frame}
+  \frametitle{Egyptian Exports Forecasts}
+  \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/egyptian_exports_forecasts.PNG}}     
+\end{frame}
+
+
 
 
 
@@ -685,3 +918,9 @@ Assume that you want to combine a first difference with a seasonal difference:
 %%% mode: latex
 %%% TeX-master: t
 %%% End:
+
+% \begin{frame}
+%   \frametitle{Stationary?}
+%      \makebox[\linewidth]{\includegraphics[width=0.9\paperwidth]{../static/course_2_img/google_price.PNG}}  
+% \end{frame}
+
