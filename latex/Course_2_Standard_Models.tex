@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-06 13:04:11 A13258Q>
+% Time-stamp: <2022-11-06 18:30:43 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -73,18 +73,26 @@
 %% ---------------------------------------------------------------------------
 %% Title info
 %% ---------------------------------------------------------------------------
-\title[Standard Models]{Basic Models: Smoothing and Autoregressive}
+\title[Canonical Models]{Canonical Models: ETS and ARIMA}
 \author[R. Lafarguette]{Romain Lafarguette, Ph.D.}
 \institute[IMF]{ADIA Quant \& IMF External Consultant\thanks{\scriptsize{\emph{This training material is the property of the International Monetary Fund (IMF) and is intended for use in IMF courses. Any reuse requires the permission of the IMF.}}}}
 
 \date[STI, 08 Nov 2022]{Singapore Training Institute, 08 November 2022}
-
 
 \titlegraphic{
     \begin{figure}
     \centering
     \subfloat{{\includegraphics[width=2cm]{../static/img/imf_logo}}}%
     \end{figure}
+}
+
+% Slide between sections
+\AtBeginSection[]
+{
+    \begin{frame}
+        \frametitle{Table of Contents}
+        \tableofcontents[currentsection]
+    \end{frame}
 }
 
 %% ---------------------------------------------------------------------------
@@ -96,25 +104,11 @@
 \maketitle
 \end{frame}
 
-% Would need a introduction
+\begin{frame}{Outline of the Course}
+\tableofcontents
+\end{frame}
 
 \section{ETS Model}
-
-
-% \begin{frame}{Simple Exponential Smoothing}
-% Simple exponential smoothing is a weighted average of past observations, with weights decreasing exponentially
-
-% \begin{equation*}
-%   y_{t+1} = \alpha y_t + \alpha(1-\alpha) y_{t-1} + \alpha(1-\alpha)^2 y_{t-2} + \dots \qquad \text{where} \ \alpha \ \in \ [0, 1]
-% \end{equation*}
-
-% \begin{itemize}
-% \item More advanced specifications allow for trends, seasonality, etc.
-% \end{itemize}
-
-
-% \end{frame}
-
 
 \begin{frame}
   \frametitle{Perspective}
@@ -131,11 +125,6 @@
     \end{enumerate}
   \item Equivalent ETS state-space models have been developped in the 1990s and the 2000s
   \end{itemize}
-
-% Under the simplest, additive specification:
-%   \begin{equation*}
-%     x_t = l_{t-1} + b_{t-1} + s_{t-m} + \epsilon_t
-%   \end{equation*}
   
 \end{frame}
 
@@ -161,18 +150,15 @@
 
 \begin{frame}{Point forecasts and forecast distribution}
 
-  \begin{itemize}
+  \begin{wideitemize}
   \item Models generates point forecasts estimates, based on a given conditional value $y_{t+1|y0} = f_y(y0)$ 
   \item However, need to generate the forecast distribution to assess the quality of models and select the best. \textbf{Model selection}
   \item A stochastic data generating process (DGP) can generate an entire forecast distribution
   \item Core idea: the residual ($\epsilon$) is the only stochastic (=random) element in $y_t = l_{t-1} + b_{t-1} + s_{t-m} + \epsilon_t$
     \begin{itemize}
-    \item Hence, the distribution of the residuals will determine the distribution of the estimator
+    \item Therefore, the distribution of the residuals will determine the distribution of the estimator
     \end{itemize}
-  \end{itemize}
-
-
-  
+  \end{wideitemize}  
 \end{frame}
 
 \section{Additive Models}
@@ -355,10 +341,10 @@ Implication: Models with additivative and multiplicative errors with the same pa
 \begin{frame}{Forecasting with ETS models}
 \textbf{Traditional point forecasts}: iterate the equations for $t = T+1, T+2, \dots, T+h$. By construction, $\epsilon_t = 0 \ \forall \ t>T$
 
-\begin{itemize}
+\begin{wideitemize}
 \item Equals to $E[y_{t+h}|x_t]$ in the case of additive seasonality only
 \item Point forecasts for additive ETS are the same as for multiplicative ETS if the parameters are the same
-\end{itemize}
+\end{wideitemize}
   
 \end{frame}
 
@@ -366,7 +352,7 @@ Implication: Models with additivative and multiplicative errors with the same pa
 
 \begin{frame}{Prediction Intervals}
 
-  \begin{itemize}
+  \begin{wideitemize}
   \item They can only be generated using the models
   \item The prediction intervals will differ between models with additive and multiplicative errors
   \item Some simple ETS models offer exact formula
@@ -375,7 +361,7 @@ Implication: Models with additivative and multiplicative errors with the same pa
     \item Simulate future sample paths, conditional on the last estimates of the states
     \item Obtain the prediction intervals from the percentiles of these simulated future paths
     \end{itemize}
-  \end{itemize}
+  \end{wideitemize}
   
 \end{frame}
 
@@ -383,7 +369,7 @@ Implication: Models with additivative and multiplicative errors with the same pa
 \begin{frame}
   \frametitle{Main Idea: Control the Rate of Change}
 
-  \begin{itemize}
+  \begin{wideitemize}
   \item $\alpha$ controls the flexibility of the \textbf{level}
     \begin{itemize}
     \item If $\alpha = 0$, the level never updates (stays at the mean)
@@ -398,25 +384,31 @@ Implication: Models with additivative and multiplicative errors with the same pa
       \item If $\gamma = 0$ the seasonality is fixed (seasonal mean)
       \item If $\gamma = 1$ the seasonality updates completely (seasonal naive)        
       \end{itemize}
-  \end{itemize}
+  \end{wideitemize}
   
 \end{frame}
 
 \begin{frame}
   \frametitle{Stability and Forecastability}
   \begin{wideitemize}
-  \item Stability and forecastability have deep mathematical implications that I will only explain intuitively
+  \item Stability and forecastability have deep mathematical implications that I will only explain intuitively\\
+
+    \smallskip
+    
     \begin{itemize}
     \item \textbf{Stability:} the weights of the observations decay over time, guaranteeing that the newer ones will have higher weights than old one.
       \begin{itemize}
       \item \emph{This is the core principle behind exponential weights: the model captures information update as time goes through}. 
-      \end{itemize}      
+      \end{itemize}
+
+      \smallskip
+      
     \item \textbf{Forecastability:} The forecastability does not guarantee that the weights decay, but it guarantees that the initial value of the state vector will have a constant impact on forecasts, i.e. will not increase in weight with the increase of the forecast horizon.
       \begin{itemize}
       \item \emph{Forecastability is a variation around the concept of ergodicity: it implies that, as the model embedds new observations, the impact of "old information" from the old observations does not "pollute" the new information brought by the new observations. In other words, the model is "learning" relevant information }
       \end{itemize}
     \end{itemize}
-    \item These concepts are mathematically rigorously defined. For more information, please refer to Hyndman open-source manual \url{https://otexts.com/fpp3/}
+    \item More information: \url{https://otexts.com/fpp3/}
   \end{wideitemize}
 \end{frame}
 
@@ -464,12 +456,12 @@ Implication: Models with additivative and multiplicative errors with the same pa
 
   Tips:\\
   
-  \begin{itemize}
+  \begin{wideitemize}
   \item Time plot
   \item The ACF of stationary data drops to zero relatively quickly
   \item The ACF of non-stationary data decreases slowly
   \item For non-stationary data, the value of the first coefficient is often large and positive
-  \end{itemize}
+  \end{wideitemize}
 
   
 \end{frame}
@@ -477,7 +469,7 @@ Implication: Models with additivative and multiplicative errors with the same pa
 
 \begin{frame}
   \frametitle{Stationary?}
-     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/google_price.PNG}}  
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/google_price.PNG}}  
 \end{frame}
 
 
@@ -488,7 +480,7 @@ Implication: Models with additivative and multiplicative errors with the same pa
 
 \begin{frame}
   \frametitle{Stationary?}
-     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/clay_brick.PNG}}  
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/clay_brick.PNG}}  
 \end{frame}
 
 
@@ -596,7 +588,9 @@ Implication: Models with additivative and multiplicative errors with the same pa
 
 
 \begin{frame}{Unit Root Tests}
-  Statistical tests can be used to determine the required order of differencing
+  Statistical tests can be used to determine the required order of differencing\\
+
+  \smallskip
 
   \begin{wideenumerate}
     \item \textbf{Augmented Dickey Fuller test}: null hypothesis is that the data is non-stationary and non-seasonal
@@ -718,24 +712,27 @@ Assume that you want to combine a first difference with a seasonal difference:
     Complex roots of the polynomial $\mathcal{P}(z) = 1 - \phi_1z - \phi_2 z^{2} - \dots \phi_p z^{p}$ lie outside the unit circle of the complex plane
   \end{alertblock}
 
-  \begin{itemize}
+  \begin{wideitemize}
   \item Intuition: For an AR(1) model, the backshift polynomial is $y_t = \phi_1 y_{t-1} + \epsilon_t \ \leftrightarrow \ y_t(1-\phi_1B) = \epsilon_t$
   \item $(1-\phi_1B) = 0 \ \leftrightarrow \ B= \underbrace{\frac{1}{\phi_1}}_{\text{Not explosive}}$
   \item To get the AR expression not explosive, we need $|\frac{1}{\phi_1}| < 1$ and therefore $|\phi_1| > 1$ 
-  \end{itemize}
+  \end{wideitemize}
+
+
+  \end{frame}
+
+
+\begin{frame}
+  \frametitle{The Case for Low Lags Orders}
 
   For low lags orders, the stationarity conditions are simply:\\
   
-  \begin{itemize}
+  \begin{wideitemize}
   \item For $p=1$: $-1 < \phi_1 < 1$
-  \item For $p=2$:
-    \begin{itemize}
-    \item $-1 < \phi_2 < 1$
-    \item $ \phi_1 + \phi_2 < 1$ and $ \phi_2 - \phi_1 < 1$
-    \end{itemize}
+  \item For $p=2$:  $-1 < \phi_2 < 1$, $ \phi_1 + \phi_2 < 1$ and $ \phi_2 - \phi_1 < 1$
   \item More complex conditions hold for $p \geq 3$
   \item Estimation software (R, Python, Eviews, etc.) takes care of this
-  \end{itemize}
+  \end{wideitemize}
   
 \end{frame}
 
@@ -857,12 +854,12 @@ Assume that you want to combine a first difference with a seasonal difference:
   \begin{wideitemize}
   \item $ARIMA(p, d, q)$ where $p$ is the autoregressive order, $d$ the degree of differencing and $q$ the order of the moving average part
   \item All linear models we discussed are special cases of the ARIMA model:
-    \begin{itemize}
+    \begin{wideitemize}
     \item White noise model: $ARIMA(0, 0, 0)$
     \item Random walk: $ARIMA(0, 1, 0)$ with no constant
     \item Random walk with drift: $ARIMA(0, 1, 0)$ with constant  
     \item $AR(p) = ARIMA(p, 0, 0)$ , $MA(q) = ARIMA(0, 0, q)$
-    \end{itemize}
+    \end{wideitemize}
   \end{wideitemize}
     
 \end{frame}
@@ -882,27 +879,202 @@ Assume that you want to combine a first difference with a seasonal difference:
 
 \begin{frame}
   \frametitle{ARIMA Analysis with Egyptian Exports}
-  \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/egyptian_exports.PNG}}     
+  \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/egyptian_exports.PNG}}     
 \end{frame}
 
 
 \begin{frame}
   \frametitle{Egyptian Exports Fit}
-  \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/egyptian_exports_fit.PNG}}     
+  \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/egyptian_exports_fit.PNG}}     
 \end{frame}
 
 \begin{frame}
   \frametitle{Egyptian Exports Fit Residuals}
-  \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/egyptian_exports_fit_residuals.PNG}}     
+  \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/egyptian_exports_fit_residuals.PNG}}     
 \end{frame}
 
 \begin{frame}
   \frametitle{Egyptian Exports Forecasts}
-  \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/egyptian_exports_forecasts.PNG}}     
+  \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/egyptian_exports_forecasts.PNG}}     
 \end{frame}
 
 
-\section{Forecasting with ARIMA Models}
+\section{Modelling and Forecasting with ARIMA Models}
+
+
+\begin{frame}
+  \frametitle{General Approach}
+  \begin{itemize}
+  \item \textbf{Plot the data}. Identify any unusual observations
+  \item If necessary, \textbf{transform the data} (using a Box-Cox transformation) to stabilize the variance
+  \item If the data are non-stationary, \textbf{first-difference} it until stationarity
+  \item \textbf{Examine the ACF/PACF}: is an $AR(p)$ or $MA(q)$ reasonable assumptions
+  \item Try your chosen models: use AIC to compare with other models
+  \item Plot the residuals, look at the residuals ACF. Residuals should look like a \textbf{white noise}.
+  \item Once the residuals look like a white noise, \textbf{compute the forecasts}    
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Parameters Selection: Algorithm}
+  \begin{block}{ARIMA Specification}
+    \begin{equation*}
+    \phi(B) (1-B)^d y_t = c + \theta(B) \epsilon_t      
+    \end{equation*}
+
+    \begin{wideitemize}
+      \item Need the select the appropriate order for $p, q, d$
+    \end{wideitemize}
+    
+  \end{block}
+
+\medskip
+  
+\textbf{Hyndman and Khandasar (2008) selection algorithm}:\\
+
+\begin{wideitemize}
+  \item Select the differencing order (=number of differences) \textbf{$d$} and \textbf{$D$} using KPSS test
+  \item Select $p, q$ by minimizing AICs
+  \item Use stepwise search to traverse model space (= test different combinations of $p, q$ for robustness)
+\end{wideitemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Selection Algorithm}
+  \begin{alertblock}{Aikaike Information Criteria (AIC)}
+    \begin{equation*}
+      AIC = -2 \text{log}(L) + 2(p+q+k+1) \left[ 1 + \frac{(p+q+k+2)}{T-p-q-k-2} \right]
+    \end{equation*}
+    \begin{itemize}
+    \item where $L$ is the maximized likelihood fitted to the \emph{differenced data}
+    \item Degree of freedom: if the model embedds a constant $c$, $k=1$, else $k=0$
+    \end{itemize}    
+  \end{alertblock}
+
+  Steps:\\
+
+  \begin{wideenumerate}
+  \item Select the current model, with the smallest AIC from the most parcimonious
+    \begin{itemize}
+    \item ARIMA(0,d, 0), ARIMA(1, d, 0), ARIMA(0, d, 1), ARIMA(1, d, 1) and ARIMA(2, d, 2)
+    \end{itemize}
+  \item Consider \textbf{variations} of the current model:
+    \begin{itemize}
+    \item Vary one of $p, q$ from current model by $\pm 1$
+    \item $p, q$ both vary from current model by $\pm 1$
+    \item Include/exclude the constant $c$ from the current model
+    \end{itemize}
+  \item The model with the lowest $AIC$ becomes the current model. Repeat step 2 until no lowest AIC can be found (traverse model space)
+  \end{wideenumerate}
+
+  
+\end{frame}
+
+\begin{frame} 
+  \frametitle{ARIMA Selection}
+  \makebox[\linewidth]{\includegraphics[height=0.95\paperheight]{../static/course_2_img/arima_selection_1.PNG}}     
+\end{frame}
+
+
+\begin{frame} 
+  \frametitle{ARIMA Selection}
+  \makebox[\linewidth]{\includegraphics[height=0.95\paperheight]{../static/course_2_img/arima_selection_2.PNG}}     
+\end{frame}
+
+
+\begin{frame} 
+  \frametitle{ARIMA Selection}
+  \makebox[\linewidth]{\includegraphics[height=0.95\paperheight]{../static/course_2_img/arima_selection_3.PNG}}     
+\end{frame}
+
+\begin{frame} 
+  \frametitle{ARIMA Selection}
+  \makebox[\linewidth]{\includegraphics[height=0.95\paperheight]{../static/course_2_img/arima_selection_4.PNG}}     
+\end{frame}
+
+
+
+
+\begin{frame} % Need to be redone
+  \frametitle{Modelling Process}
+  \makebox[\linewidth]{\includegraphics[height=0.95\paperheight]{../static/course_2_img/model_process.PNG}}     
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Point Forecasts}
+
+  General approach:\\
+  \medskip
+
+  \begin{wideitemize}
+    \item Rearrange the ARIMA equation so that $y_t$ is on the left-hand side
+    \item Convert from polynomial backshift to companion form
+    \item On the right hand-side, replace the future observations by their forecasts, the future errors by zeros, and the past errors by the corresponding residuals
+    \item Start with $h=1$; iterate with $h=2, 3, \dots$
+  \end{wideitemize}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Example with an ARIMA(3, 1, 1): Rearrangements}
+
+  \begin{block}{Specification}
+    \begin{equation*}
+      \underbrace{(1 - \phi_1B - \phi_2B^2 - \phi_3B^3)}_{AR(3)}\underbrace{(1-B)}_{I(1)}y_t = \underbrace{(1+\theta_1 B)\epsilon_t}_{MA(1)}
+    \end{equation*}
+  \end{block}
+  
+    \begin{itemize}
+    \item Distribute the backshift:
+      \begin{equation*}
+      \left[1 - (1+\phi_1) B + (\phi_1 - \phi_2) B^2 + (\phi_2-\phi_3) B^3 + \phi_3 B^4 \right] y_t = (1+\theta_1 B)\epsilon_t  
+      \end{equation*}
+      
+    \item Express as a function of $y_t$:
+      \begin{equation*}
+      y_t - (1+\phi_1)y_{t-1} + (\phi_1 - \phi_2)y_{t-2} + (\phi_2 - \phi_3)y_{t-3} + \phi_3 y_{t-4} = \epsilon_t + \theta_1 \epsilon_{t-1}  
+      \end{equation*}
+    
+    \item Rearrange:
+      \begin{equation*}
+y_t = (1+\phi_1)y_{t-1} - (\phi_1 - \phi_2)y_{t-2} - (\phi_2 - \phi_3)y_{t-3} - \phi_3 y_{t-4} + \epsilon_t + \theta_1 \epsilon_{t-1}        
+      \end{equation*}
+      
+    \end{itemize}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Example with an ARIMA(3, 1, 1): Iterative Replacement}
+
+  \begin{block}{Component Form}
+    \begin{equation*}
+      y_t = (1+\phi_1)y_{t-1} - (\phi_1 - \phi_2)y_{t-2} - (\phi_2 - \phi_3)y_{t-3} - \phi_3 y_{t-4} + \epsilon_t + \theta_1 \epsilon_{t-1}
+    \end{equation*}
+  \end{block}
+  
+  \begin{wideenumerate}
+  \item Start at a given $T$, known. Plug $T$ in the formula to obtain the expression of $T+1$
+    \begin{equation*}
+      y_{T+1} = (1+\phi_1)y_{T} - (\phi_1 - \phi_2)y_{T-1} - (\phi_2 - \phi_3)y_{T-2} - \phi_3 y_{T-3} + \epsilon_{T+1} + \theta_1 \epsilon_{T}
+    \end{equation*}
+
+  \item Problem: $\epsilon_{T+1}$ is unknown. Put it at 0 and replace $\epsilon_{T}$ by the fitted residuals $\hat{\epsilon_{T}}$
+    \begin{equation*}
+      y_{T+1} = (1+\phi_1)y_{T} - (\phi_1 - \phi_2)y_{T-1} - (\phi_2 - \phi_3)y_{T-2} - \phi_3 y_{T-3} +  \theta_1 \hat{\epsilon_{T}}
+    \end{equation*}
+
+\item Likewise, iterate for next periods, $T+2, T+3, etc.$
+    
+    \end{wideenumerate}  
+\end{frame}
+
 
 \begin{frame}
   \frametitle{Prediction Intervals}
@@ -915,17 +1087,14 @@ Assume that you want to combine a first difference with a seasonal difference:
   \end{block}
 
     \begin{wideitemize}
-      %\item $v_{T+1|T} \ = \ \hat{\sigma}}^2$ for all ARIMA models, regardless of parameters and orders
+    \item $v_{T+1|T} \ = \ \hat{\sigma}^2$ for all ARIMA models, regardless of parameters and orders
       \item Multi-step prediction interval for $ARIMA(0,0,q)$:
       \begin{itemize}
-      \item $y_t \ = \ \epsilon_t + \sum__{i=1}^q \theta_i \epsilon_{t-i}$
-      %\item $V_{T|T+h} \ = \ \hat{\sigma}^2 \left[\sum_{i=1}^{h-1}\theta_i^2\right] \qquad \forall \ h = 2, 3, \dots$
+      \item $y_t \ = \ \epsilon_t + \sum_{i=1}^q \theta_i \epsilon_{t-i}$
+      \item $V_{T|T+h} \ = \ \hat{\sigma}^2 \left[ \sum_{i=1}^{h-1}\theta_i^2 \right] \qquad \forall \ h = 2, 3, \dots$
       \end{itemize}
       
-    \end{wideitemize}
-    
-
-  
+    \end{wideitemize}      
 \end{frame}
 
 
@@ -980,13 +1149,13 @@ Example: $ARIMA(1,1,1)(1,1,1)_4$, without constant
 
   The US Census Bureau uses the following models the most often:
 
-  \begin{itemize}
+  \begin{wideitemize}
   \item $ARIMA(0,1,1)(0,1,1)_m$ with log transformation
   \item $ARIMA(0,1,2)(0,1,1)_m$ with log transformation
   \item $ARIMA(2,1,0)(0,1,1)_m$ with log transformation
   \item $ARIMA(0,2,2)(0,1,1)_m$ with log transformation
   \item $ARIMA(2,1,2)(0,1,1)_m$ with \textbf{no} transformation    
-  \end{itemize}  
+  \end{wideitemize}  
 \end{frame}
 
 
@@ -1005,7 +1174,7 @@ Example: $ARIMA(1,1,1)(1,1,1)_4$, without constant
     
   \end{exampleblock}
   
-
+\medskip
 
   \begin{exampleblock}{$ARIMA(0,0,0)(1,0,0)_{12}$  will show}
 
@@ -1021,29 +1190,29 @@ Example: $ARIMA(1,1,1)(1,1,1)_4$, without constant
 
 \begin{frame}
   \frametitle{Application:  US Leisure Employment and Hospitality}
-     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/us_leisure_1.PNG}}  
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/us_leisure_1.PNG}}  
 \end{frame}
 
 \begin{frame}
   \frametitle{Application:  US Leisure Employment and Hospitality}
-     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/us_leisure_2.PNG}}  
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Application:  US Leisure Employment and Hospitality}
-     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/us_leisure_3.PNG}}  
-\end{frame}
-
-\begin{frame}
-  \frametitle{Application:  US Leisure Employment and Hospitality}
-     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/us_leisure_4.PNG}}  
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/us_leisure_2.PNG}}  
 \end{frame}
 
 
 \begin{frame}
   \frametitle{Application:  US Leisure Employment and Hospitality}
-     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/us_leisure_5.PNG}}  
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/us_leisure_3.PNG}}  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Application:  US Leisure Employment and Hospitality}
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/us_leisure_4.PNG}}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Application:  US Leisure Employment and Hospitality}
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/us_leisure_5.PNG}}  
 \end{frame}
 
 
@@ -1054,12 +1223,12 @@ Example: $ARIMA(1,1,1)(1,1,1)_4$, without constant
   \frametitle{ARIMA versus ETS}
   While the general perception sees ARIMA has more general than ETS, this is not exactly true:
 
-  \begin{itemize}
+  \begin{wideitemize}
   \item Linear ETS are all special cases of ARIMA models
   \item Non-linear exponential smoothing model (e.g. multiplicative) have no ARIMA equivalent
   \item Many ARIMA have no linear exponential smoothing model equivalent
   \item ETS models are non-stationary. The number of roots depends on the inclusion of seasonal terms or not
-  \end{itemize}
+  \end{wideitemize}
 \end{frame}
 
 

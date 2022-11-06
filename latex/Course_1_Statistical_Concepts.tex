@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-05 21:10:25 A13258Q>
+% Time-stamp: <2022-11-06 20:08:58 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 % Graphics
 \usepackage{graphicx} % Insert graphics
 \usepackage{subfig} % Multiple figures in one graphic
-\graphicspath{{/../static/img}{/../static/diagrams}{/../static/course_1_img}}
+\graphicspath{{/../static/img}{/../static/diagrams}}
 
 % Layout
 \usepackage{changepage}
@@ -58,23 +58,13 @@
 \newenvironment{extrawideitemize}{\itemize\addtolength{\itemsep}{30pt}}{\enditemize}
 \newenvironment{extrawideenumerate}{\enumerate\addtolength{\itemsep}{30pt}}{\endenumerate}
 
-% Define the footer with higher/lower adjustment
-\defbeamertemplate{footline}{higher page number}
-{
-  \hfill
-  \usebeamercolor[fg]{page number in head/foot}
-  \usebeamerfont{page number in head/foot}  
-  \thepage/\inserttotalframenumber\kern1em\vskip2pt %Change xxpt to
-                                %lower/higher the footnote
-}
-\setbeamertemplate{footline}[higher page number]
-
 % Remove navigation symbols and other superfluous elements
 \setbeamertemplate{navigation symbols}{}
-\setbeameroption{hide notes}
-\setbeamertemplate{note page}[plain]
 \beamertemplatenavigationsymbolsempty
+
+%\setbeamertemplate{note page}[plain]
 \hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
+\setbeameroption{hide notes}
 
 % Institute font
 \setbeamerfont{institute}{size=\footnotesize}
@@ -85,7 +75,7 @@
 %% ---------------------------------------------------------------------------
 \title[Concepts]{Core Concepts in Financial Econometrics}
 \author[R. Lafarguette]{Romain Lafarguette, Ph.D.}
-\institute[IMF]{ADIA Quant \& IMF External Consultant}
+\institute[IMF]{ADIA Quant \& IMF External Consultant\thanks{\scriptsize{\emph{This training material is the property of the International Monetary Fund (IMF) and is intended for use in IMF courses. Any reuse requires the permission of the IMF.}}}}
 
 \date[STI, 08 Nov 2022]{Singapore Training Institute, 08 November 2022}
 
@@ -96,37 +86,29 @@
     \end{figure}
 }
 
+
+% Slide between sections
+\AtBeginSection[]
+{
+    \begin{frame}
+        \frametitle{Table of Contents}
+        \tableofcontents[currentsection]
+    \end{frame}
+}
+
 %% ---------------------------------------------------------------------------
 %% Title slide
 %% ---------------------------------------------------------------------------
 \begin{document}
 
-\begingroup
-\renewcommand{\insertframenumber}{}
 \begin{frame}
-  %\addtocounter{framenumber}{-1}
 \maketitle
 \end{frame}
-\endgroup
 
 
-\begin{frame}
-  \frametitle{Outline}
-
-  This short crash-course is divided in three parts covering:\\
-  \smallskip
-  
-  \begin{enumerate}
-  \item \textbf{Data concepts}: population, sample, data types, data generating process, etc.
-  \item \textbf{Statistical Inference}: stochastic process, estimator, distributions, convergence, etc.
-  \item \textbf{Statistical Properties of Financial Time Series}: stationarity, autocorrelation, heavy tails, etc.
-  \end{enumerate}
-
-
-\smallskip
-\emph{NB: this slide-deck follows the excellent course of Christophe Hurlin \url{https://sites.google.com/view/christophe-hurlin/teaching-resources}}  
+\begin{frame}{Outline of the Course}
+\tableofcontents
 \end{frame}
-
 
 
 %% ---------------------------------------------------------------------------
@@ -149,65 +131,7 @@ Financial econometrics (including time-series econometrics) are based on four ma
 \end{frame}
 
 
-
 \section{Data Concepts}
-\begin{frame}
-  \frametitle{Population vs. Sample}
-
-  \begin{block}{Definition: Population}
-    A \textbf{population} is defined as including all entities (e.g. banks or firms) or all the time periods of the processus that has to be explained
-  \end{block}
-
-\smallskip
-  
-  \begin{wideitemize}
-    \item In most cases, it is impossible to observe the entire statistical population, due to constraints (recording period, cost, etc.)
-    \item A researcher would instead observe a \textbf{statistical sample} from the population. He will estimate an econometric model to understand the \textbf{properties on the population as a whole}.
-  \end{wideitemize} 
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Data Generating Process}
-  
-  \begin{block}{Definition: Data Generating Process}
-    A \textbf{Data Generating Process (DGP)} is a process in the real world that "generates" the data (or the sample) of interest
-  \end{block}
-
-\end{frame}
-
-\begin{frame}
-
-  \begin{exampleblock}{Example: Data Generating Process}
-    Let us assume that there is a linear relationship between interest rates in two countries ($R, R^*$), their forward ($F$) and their spot exchange rate ($S$).\\
-
-    \begin{equation*}
-      \frac{F}{S} = \frac{1+R}{1+R^*}
-    \end{equation*}
-
-    This non-arbitrage relationship (CIP) can be used in the foreign exchange market to determine the forward exchange rate
-
-    \begin{equation*}
-      \mathbb{E}[F |S=s, R=r, R^*= r^*] = s*\frac{1+r}{1+r^*}
-    \end{equation*}
-
-This relationship is the \textbf{Data Generating Process} for $F$     
-  \end{exampleblock}
-
-The equivalent of population for time series econometrics is the DGP.\\
-NB: note that I use $R$ to describe the random variable and $r$ to describe its realization
-  
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Econometrics Challenge}
-  The challenge of econometrics is to draw conclusions about a DGP (or population), after observing only one realization $\{x_1, \dots X_N\}$ of a random sample (the dataset).\\
-
-%TODO: add a diagram
-  
-\end{frame}
-
 
 \begin{frame}
   \frametitle{Data Types}
@@ -241,6 +165,8 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
   \frametitle{Time Series Data}
 
   Time series data are very common in financial econometrics and central banking. They entail specific estimation methods to do the \textbf{time-dependence}.\\
+
+  \medskip
   
   \begin{wideitemize}
     \item Data for a single entity (person, bank, country, etc.) collected at multiple time periods. Repeated observations of the same variables (interest rate, GDP, prices, etc.)
@@ -253,7 +179,9 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
 
 \begin{frame}
   \frametitle{Panel Data}
-  Also called longitudinal data. They contain the most information and allow for more complex estimation and analysis.
+  Also called longitudinal data. They contain the most information and allow for more complex estimation and analysis.\\
+
+  \medskip
 
   \begin{wideitemize}
     \item Data for multiple entities (individuals, firms, countries, banks, etc.) in which outcomes and characteristics of each entity are observed at multiple points in time
@@ -263,6 +191,80 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
 
 \end{frame}
 
+
+\begin{frame}
+  \frametitle{Population vs. Sample}
+
+  \begin{block}{Definition: Population}
+    A \textbf{population} is defined as including all entities (e.g. banks or firms) or all the time periods of the processus that has to be explained
+  \end{block}
+
+\smallskip
+  
+  \begin{wideitemize}
+    \item In most cases, it is impossible to observe the entire statistical population, due to constraints (recording period, cost, etc.)
+    \item A researcher would instead observe a \textbf{statistical sample} from the population. He will estimate an econometric model to understand the \textbf{properties on the population as a whole}.
+  \end{wideitemize} 
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Data Generating Process}
+  
+  \begin{block}{Definition: Data Generating Process}
+    \begin{itemize}
+    \item A \textbf{Data Generating Process (DGP)} is a process in the real world that "generates" the data (or the sample) of interest.
+    \item The process is represented by random variable (see after) $X_t$; the observation $x_t$ is one possible realization of $X_t$
+    \item Given that we observe a set of $x_1, \dots, x_T$ what can we \textbf{infer} about the process $X_1, \dots, X_T$ that has generated them?
+    \end{itemize}        
+  \end{block}
+
+  \begin{wideenumerate}
+    \item The DGP is the "true" model that has generated the dataset $x_1, \dots, x_t$
+    \item In reality, we can only observe the time series a \textbf{finite number of times}
+    \item However, it is convenient to allow - theoretically - the number of observations to be \textbf{infinite}: $\{X_t\}_{t \ \in \ \mathbb{Z}}$. In this case,$\{X_t\}_{t \ \in \ \mathbb{Z}}$ is called a discrete time \textbf{stochastic process} 
+  \end{wideenumerate}
+
+  
+\end{frame}
+
+\begin{frame}
+
+  \begin{exampleblock}{Example: Data Generating Process}
+    Let us assume that there is a linear relationship between interest rates in two countries ($R, R^*$), their forward ($F$) and their spot exchange rate ($S$).\\
+
+    \begin{equation*}
+      \frac{F}{S} = \frac{1+R}{1+R^*}
+    \end{equation*}
+
+    This non-arbitrage relationship (CIP) can be used in the foreign exchange market to determine the forward exchange rate
+
+    \begin{equation*}
+      \mathbb{E}[F |S=s, R=r, R^*= r^*] = s*\frac{1+r}{1+r^*}
+    \end{equation*}
+
+This relationship is the \textbf{Data Generating Process} for $F$     
+  \end{exampleblock}
+
+The equivalent of population for time series econometrics is the DGP.\\
+NB: note that I use $R$ to describe the random variable and $r$ to describe its realization
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Econometrics Challenge}
+  The challenge of econometrics is to draw conclusions about a DGP (or population), after observing only one realization $\{x_1, \dots X_N\}$ of a random sample (the dataset). To this end, we use a statistical - or econometrics - model\\
+
+\medskip
+  
+    \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/dgp_econometric_model.jpeg}}
+  
+  
+\end{frame}
+
+
+\section{Statistical Inference}
 
 \begin{frame}
   \frametitle{Econometric Model}
@@ -279,12 +281,48 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
 
   \item \textbf{Non-parametric and semi-parametric models}: the link function can not be described using a finite number of parameters. The link function is assumed to be unknown and has to be estimated
     
+  \item The model is likely to be different from the DGP: there is a \textbf{model risk}
+    
   \end{enumerate}
+\end{frame}
+
+
+
+
+\begin{frame}
+  \frametitle{Example: A Linear Model}
+
+  \begin{exampleblock}{Autoregressive Model: Look at the Past to Forecast the Future}
+    A canonical basic time series model is the Autoregressive model of order $p$, called an AR model:
+
+    \begin{equation*}
+      X_t = \alpha_0 + \alpha_1 X_{t-1} + \alpha_2 X_{t-2} + \dots + \alpha_p X_{t-p} + \epsilon_t
+    \end{equation*}       
+  \end{exampleblock}
+
+  \medskip
+
+  \begin{itemize}
+  \item $\epsilon_t$ is the randomness in the model: it represents a stochastic element that creates a discrepancy between the model and the reality. The role of a modeler is to reduce this discrepancy as much as possible
+  \item The linear model is informative about the \textbf{conditional mean} of $X_t$, i.e. the average value of $X_t$ we can expect given certain past values $\tilde{X}_{t-1}$ of $X_t$
+    \begin{equation*}
+      \mathbb{E}[X_t|\tilde{X}_{t-1}, \tilde{X}_{t-2}, \dots, \tilde{X}_{t-p}] = \hat{\alpha}_0 + \hat{\alpha}_1 \tilde{X}_{t-1} + \hat{\alpha}_2 \tilde{X}_{t-2} + \dots + \hat{\alpha}_p \tilde{X}_{t-p}  
+    \end{equation*}    
+  \end{itemize}
   
 \end{frame}
 
 
-\section{Statistical Inference}
+\begin{frame}
+  \frametitle{How to Specify an Appropriate Time Series Model}
+  \begin{wideenumerate}
+    \item Study some \textbf{statistical properties} of the observed dat $\{x_t\}$, for instance, the \textbf{stationarity}, the patterns of the autocorrelation function \textbf{ACF}, or the \textbf{partial autocorrelation function}, etc.
+    \item Compare these properties to the theoretical properties of some \textbf{typical time series models}, such as AR, MA, ARIMA, SARIMA, etc.
+    \item Choose the most appropriate model and \textbf{estimate its parameters}
+    \item Use this model for forecasting
+  \end{wideenumerate}
+\end{frame}
+
 
 \begin{frame}
   \frametitle{Empirical Strategy}
@@ -309,7 +347,7 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
 
 \begin{frame}
   \frametitle{Refresher: Random Variables}
-  \begin{itemize}
+  \begin{wideitemize}
   \item Mathematicians are formalizing and modeling randomness via the concept of \textbf{random variables}.\\
   \item Pay attention: a random variable is neither random (it is formalized via laws and distributions), not a variable (it is a function)
   \item A \textbf{random variable} is a function $f: \Omega \mapsto \mathcal{R}$ that assigns to
@@ -322,7 +360,7 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
         6\})/m(\{1, 2, 3, 4, 5, 6\}) = \frac{1}{2}$ \emph{(here, the measure
           simply "counts" the outcomes with equal weights)}
         \end{itemize}     
-  \end{itemize}  
+  \end{wideitemize}  
 \end{frame}
 
 \begin{frame}
@@ -373,7 +411,7 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
 
 \begin{frame}
 \frametitle{Link between PDF and CDF}
-    \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/pdf and cdf.png}}
+    \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_1_img/pdf and cdf.png}}
 \end{frame}
 
 
@@ -639,7 +677,7 @@ X_t \ \overset{d}{\to} \ X \quad \Leftrightarrow \quad  F_T(x) = F(x) \qquad \ \
 
 
 
-\section{Financial Stylized Properties}
+\section{Statistical Features and Properties}
 
 \begin{frame}
   \frametitle{Stylized Properties}
