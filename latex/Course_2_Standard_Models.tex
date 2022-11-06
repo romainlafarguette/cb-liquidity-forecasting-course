@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-06 00:39:45 A13258Q>
+% Time-stamp: <2022-11-06 13:04:11 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -73,11 +73,12 @@
 %% ---------------------------------------------------------------------------
 %% Title info
 %% ---------------------------------------------------------------------------
-\title[Standard Models]{Standard Time Series Models}
+\title[Standard Models]{Basic Models: Smoothing and Autoregressive}
 \author[R. Lafarguette]{Romain Lafarguette, Ph.D.}
-\institute[IMF]{ADIA Quant \& IMF External Consultant}
+\institute[IMF]{ADIA Quant \& IMF External Consultant\thanks{\scriptsize{\emph{This training material is the property of the International Monetary Fund (IMF) and is intended for use in IMF courses. Any reuse requires the permission of the IMF.}}}}
 
 \date[STI, 08 Nov 2022]{Singapore Training Institute, 08 November 2022}
+
 
 \titlegraphic{
     \begin{figure}
@@ -420,7 +421,7 @@ Implication: Models with additivative and multiplicative errors with the same pa
 \end{frame}
 
 
-\section{ARIMA Model}
+\section{ARIMA Models}
 
 
 \begin{frame}{ARIMA Model}
@@ -671,8 +672,6 @@ Assume that you want to combine a first difference with a seasonal difference:
 \end{frame}
 
 
-\section{Autoregressive Models}
-
 \begin{frame}
   \frametitle{Autoregressive (AR) Models}
 
@@ -689,8 +688,6 @@ Assume that you want to combine a first difference with a seasonal difference:
 
   \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/ar1_ar2.PNG}}   
 \end{frame}
-
-
 
 
 \begin{frame}
@@ -903,6 +900,182 @@ Assume that you want to combine a first difference with a seasonal difference:
   \frametitle{Egyptian Exports Forecasts}
   \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/egyptian_exports_forecasts.PNG}}     
 \end{frame}
+
+
+\section{Forecasting with ARIMA Models}
+
+\begin{frame}
+  \frametitle{Prediction Intervals}
+
+
+  \begin{block}{95\% Prediction Interval}
+    \begin{equation*}
+      \hat{y}_{T+h|T} \ \pm \ 1.96\sqrt{v_{T+h|T}}
+    \end{equation*}
+  \end{block}
+
+    \begin{wideitemize}
+      %\item $v_{T+1|T} \ = \ \hat{\sigma}}^2$ for all ARIMA models, regardless of parameters and orders
+      \item Multi-step prediction interval for $ARIMA(0,0,q)$:
+      \begin{itemize}
+      \item $y_t \ = \ \epsilon_t + \sum__{i=1}^q \theta_i \epsilon_{t-i}$
+      %\item $V_{T|T+h} \ = \ \hat{\sigma}^2 \left[\sum_{i=1}^{h-1}\theta_i^2\right] \qquad \forall \ h = 2, 3, \dots$
+      \end{itemize}
+      
+    \end{wideitemize}
+    
+
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Properties of Prediction Intervals}
+  \begin{wideenumerate}
+    \item Prediction intervals increase in size with the forecasting horizon
+    \item Prediction intervals can be difficult to calculate by hand
+    \item Calculations assume that the residuals are \textbf{uncorrelated} and \textbf{normally distributed}
+    \item Prediction intervals tend to be too narrow ompared to the true uncertainty:
+      \begin{itemize}
+      \item The uncertainty in the parameter estimateas has not been accounted for
+      \item The ARIMA model assumes that the recent historical patterns won't change during the forecast period
+      \item The ARIMA model assumes uncorrelated future errors
+      \end{itemize}
+  \end{wideenumerate}
+\end{frame}
+
+\section{Seasonal ARIMA}
+\begin{frame}
+  \frametitle{Seasonal ARIMA}
+
+  \begin{block}{Specification}
+    ARIMA  $ \underbrace{(p, d, q)}_{_{\text{Non-Seasonal part of the model}}} \qquad \qquad \underbrace{(P, D, Q)_m}_{\text{Seasonal part of the model}}$
+  \end{block}
+
+\medskip
+  
+where $m$ = number of observations per year
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Example: $ARIMA(1,1,1)(1,1,1)_4$}
+
+Example: $ARIMA(1,1,1)(1,1,1)_4$, without constant
+
+\begin{equation*}
+  \underbrace{(1-\phi_1B)}_{\text{Non-Seas. AR1}} \underbrace{(1-\Phi_1B^4)}_{\text{Seas. AR1}}\underbrace{(1-B)}_{\text{Seas. Diff.}} \qquad = \qquad \underbrace{(1+\theta_1 B)}_{\text{Non-seas. MA(1)}} \underbrace{(1+\Theta_1 B^4)}_{\text{Seasonal MA(1)}}\epsilon_t
+\end{equation*}
+
+\medskip
+
+  All factors can be multiplied out to obtain the model's component form
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{US Census Canonical Models}
+
+  The US Census Bureau uses the following models the most often:
+
+  \begin{itemize}
+  \item $ARIMA(0,1,1)(0,1,1)_m$ with log transformation
+  \item $ARIMA(0,1,2)(0,1,1)_m$ with log transformation
+  \item $ARIMA(2,1,0)(0,1,1)_m$ with log transformation
+  \item $ARIMA(0,2,2)(0,1,1)_m$ with log transformation
+  \item $ARIMA(2,1,2)(0,1,1)_m$ with \textbf{no} transformation    
+  \end{itemize}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Intuition}
+
+  The seasonal part of an AR or MA model will be seen in the seasonal lags of the PACF and ACF
+
+
+  \begin{exampleblock}{$ARIMA(0,0,0)(0,0,1)_{12}$  will show}
+
+    \begin{itemize}
+    \item A spike at lag 12 in the ACF but no other significant spikes
+    \item The PACF will show exponential decay in the seasonal lags; that is, at lags 12, 24, 36, etc.
+    \end{itemize}
+    
+  \end{exampleblock}
+  
+
+
+  \begin{exampleblock}{$ARIMA(0,0,0)(1,0,0)_{12}$  will show}
+
+    \begin{itemize}
+    \item Exponential lags in the seasonal lags of the ACF
+    \item A single significant spike at lag 12 in the PACF
+    \end{itemize}
+    
+  \end{exampleblock}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Application:  US Leisure Employment and Hospitality}
+     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/us_leisure_1.PNG}}  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Application:  US Leisure Employment and Hospitality}
+     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/us_leisure_2.PNG}}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Application:  US Leisure Employment and Hospitality}
+     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/us_leisure_3.PNG}}  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Application:  US Leisure Employment and Hospitality}
+     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/us_leisure_4.PNG}}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Application:  US Leisure Employment and Hospitality}
+     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/us_leisure_5.PNG}}  
+\end{frame}
+
+
+\section{ARIMA versus ETS}
+
+
+\begin{frame}
+  \frametitle{ARIMA versus ETS}
+  While the general perception sees ARIMA has more general than ETS, this is not exactly true:
+
+  \begin{itemize}
+  \item Linear ETS are all special cases of ARIMA models
+  \item Non-linear exponential smoothing model (e.g. multiplicative) have no ARIMA equivalent
+  \item Many ARIMA have no linear exponential smoothing model equivalent
+  \item ETS models are non-stationary. The number of roots depends on the inclusion of seasonal terms or not
+  \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{ARIMA versus ETS Models}
+     \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_2_img/ARIMA_vs_ETS.PNG}}  
+\end{frame}
+
+
+
+
+
+
+
+
 
 
 
