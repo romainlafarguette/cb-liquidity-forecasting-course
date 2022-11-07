@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-06 20:08:58 A13258Q>
+% Time-stamp: <2022-11-07 05:29:09 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -115,6 +115,8 @@
 %% Core
 %% ---------------------------------------------------------------------------
 
+\section{Data Concepts}
+
 \begin{frame}
   \frametitle{Overview}
 
@@ -130,8 +132,6 @@ Financial econometrics (including time-series econometrics) are based on four ma
   
 \end{frame}
 
-
-\section{Data Concepts}
 
 \begin{frame}
   \frametitle{Data Types}
@@ -172,7 +172,6 @@ Financial econometrics (including time-series econometrics) are based on four ma
     \item Data for a single entity (person, bank, country, etc.) collected at multiple time periods. Repeated observations of the same variables (interest rate, GDP, prices, etc.)
     \item Order of data is important!
     \item The observations are typically not independent over time
-    \item In this case, the notion of population corresponds to the \textbf{Data Generating Process (DGP)} 
   \end{wideitemize}  
 \end{frame}
 
@@ -258,7 +257,7 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
 
 \medskip
   
-    \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/dgp_econometric_model.jpeg}}
+    \makebox[\linewidth]{\includegraphics[height=0.6\paperheight]{../static/course_1_img/dgp_econometric_model.jpeg}}
   
   
 \end{frame}
@@ -367,7 +366,7 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
   \frametitle{Random Variables (II)}    
   \begin{itemize}
   \item Random variables are the "building block" of statistics:
-    \begin{itemize}
+    \begin{wideitemize}
     \item Random variables are characterized by their distribution (generating
       function, moments, quantiles, etc.)
     \item The behavior of two or more random variables can be characterized by
@@ -376,7 +375,7 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
     \item The main theorems in statistics (law of large numbers, central limit
       theorem, etc.) leverage the properties of random variables
     \end{itemize}
-  \end{itemize}
+  \end{wideitemize}
 \end{frame}
 
 
@@ -399,13 +398,13 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
 \end{frame}
   
 \begin{frame}
-  \begin{itemize}
+  \begin{wideitemize}
   \item \textbf{The probability density function (pdf)} usually denoted $f_X(x0)$ (remember than $X$ stands for the random variable, while $x0$ stands for a realization of the random variable) represents the relatively likelihood that the random variable $X$ will fall within a small neighborhood of $x0$ (infinitesimal concept). It is easier to conceptualize the pdf via the cdf
   \item \textbf{The cumulative distribution function (cdf)} usually denoted $F_X(x0)$ represents the probability that the random variable will be lower than $x0$. It cumulates the pdf ("all the small neighborhoods") such that:
     \begin{equation*}
 F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh      
     \end{equation*}    
-  \end{itemize}  
+  \end{wideitemize}  
 \end{frame}
 
 
@@ -503,11 +502,11 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
 
     \begin{exampleblock}{Estimate of a linear regression}
       \begin{itemize}
-      \item We are interested in the following DGP: $Y = \alpha + \beta*X + \epsilon$, where we observe a joint sample ${y1, \dots, y_T}, {x1, \dots, x_T}$.\\
+      \item DGP $Y = \alpha + \beta*X + \epsilon$, with joint sample ${y1, \dots, y_T}, {x1, \dots, x_T}$.\\
       \item We have an estimator (for instance an OLS) of $\hat{\alpha}, \hat{\beta}$
       \item Then, for any value of $X=x_0$, we can simply project the \textbf{conditional expected estimate} $y_0 = \hat{\alpha} + \hat{\beta}*x_o + \hat{\epsilon}$
       \item If the estimator is unbiased, the fitted residuals $\hat{\epsilon} = y_t - \hat{\alpha} - \hat{\beta}*x_t$ are centered on \textbf{average}:$\mathbb{E}\left[\hat{\epsilon}\right]=0$. This is why the residual disappear from the estimate of the conditional expected estimate in an OLS... but no bias doesn't mean no variance !
-      \item $\epsilon$ and consequently $\hat{\epsilon}$ are random variables: their distribution will determine the distribution of the estimator $\hat{\theta} = \hat{\alpha}, \hat{\beta}$
+      \item $\epsilon$ \& $\hat{\epsilon}$ are random variables: they determine $\hat{\alpha}, \hat{\beta}$ distributions
       \end{itemize}
     \end{exampleblock}    
   \end{frame}
@@ -515,7 +514,9 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
 
   \begin{frame}
     \frametitle{What Constitutes a Good Estimator?}
-    The idea is to study the properties of the \textbf{sampling distribution} of the estimator $\hat{\theta}$, and especially its moments, such as:
+    The idea is to study the properties of the \textbf{sampling distribution} of the estimator $\hat{\theta}$, and especially its moments, such as:\\
+
+    \medskip
 
     \begin{wideitemize}
     \item $\mathbb{E}[\hat{\theta}]$ for the biais
@@ -535,10 +536,8 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
       \item \textbf{Finite sample properties} (or finite sample distributions) investigate how the estimator behave when the observational sample is relatively limited (a few hundreds to a few thousands of observations max)
       \item However, these properties rely on a distributional assumption (usually normality or gaussianity), that may be difficult to test. 
       \item When the normality assumption is no longer valid (and the finite sample distribution is unknown), estimators are evaluated on the basis on their \textbf{large sample}, or \textbf{asymptotic properties}
-    \end{wideenumerate}
-    
+    \end{wideenumerate}    
   \end{frame}
-
 
 
   \begin{frame}
@@ -719,17 +718,26 @@ X_t \ \overset{d}{\to} \ X \quad \Leftrightarrow \quad  F_T(x) = F(x) \qquad \ \
 \end{frame}
 
 
-% \begin{frame}
-%   \frametitle{Intuitive Interpretation}
-%    Weak stationarity means that the stochastic process oscillates around a constant level, is not trended and has the following properties:\\
+\begin{frame}
+  \frametitle{Intuitive Interpretation}
+   Weak stationarity means that the stochastic process oscillates around a constant level, is not trended and has the following properties:\\
   
-%   \begin{enumerate}
-%   \item The first two moments are constant over time
-%     \begin{equation*}
-% \mathbb{E}(X_t)
-%     \end{equation*}
-%   \end{enumerate}
-% \end{frame}
+  \begin{wideenumerate}
+  \item The mean and time-covariance are constant over time
+    \begin{equation*}
+\mathbb{E}(X_t) = \mu \qquad \mathbb{C}ov(X_t, X_{t-h}) = \gamma(h) \qquad \forall \ h \ \in \ \mathbb{Z}
+\end{equation*}
+\item Because the time-covariance is constant over time, it implies that the variance is also constant over time
+  \begin{equation*}
+\mathbb{V}(X_t) = \mathbb{C}ov(X_t, X_{t-h}) = \gamma(0) \qquad \forall \ t \ \in \ \mathbb{Z}
+  \end{equation*}
+\item $\mathbb{C}ov(X_t, X_{t-h}) = \gamma(h) \qquad \forall \ h \ \in \ \mathbb{Z}$ can be interpreted as "\emph{covariance doesn't change when shifted in time}"
+  \begin{equation*}
+\mathbb{C}ov(X_r, X_s) = \mathbb{C}ov(X_{r+t}, X_{s+t}) \qquad \forall \ (r, s, t) \ \in \ \mathbb{Z}^3
+  \end{equation*}
+  
+  \end{wideenumerate}
+\end{frame}
 
 
 \begin{frame}
