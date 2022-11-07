@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-06 18:30:43 A13258Q>
+% Time-stamp: <2022-11-07 12:17:07 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -1113,9 +1113,9 @@ y_t = (1+\phi_1)y_{t-1} - (\phi_1 - \phi_2)y_{t-2} - (\phi_2 - \phi_3)y_{t-3} - 
   \end{wideenumerate}
 \end{frame}
 
-\section{Seasonal ARIMA}
+\section{Seasonal ARIMA (SARIMA)}
 \begin{frame}
-  \frametitle{Seasonal ARIMA}
+  \frametitle{Seasonal ARIMA (SARIMA)}
 
   \begin{block}{Specification}
     ARIMA  $ \underbrace{(p, d, q)}_{_{\text{Non-Seasonal part of the model}}} \qquad \qquad \underbrace{(P, D, Q)_m}_{\text{Seasonal part of the model}}$
@@ -1213,6 +1213,69 @@ Example: $ARIMA(1,1,1)(1,1,1)_4$, without constant
 \begin{frame}
   \frametitle{Application:  US Leisure Employment and Hospitality}
      \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_2_img/us_leisure_5.PNG}}  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Treatment of Seasonality}
+
+  \begin{wideitemize}
+    \item Daily data can exhibit multiple seasonal periodicities. This is a complication for all high-frequency forecasting problems: day in the month, day in the week, etc.
+    \item This comes with additional complexity:
+      \begin{itemize}
+        \item Months has different number of days
+        \item Leap years with different number of days
+        \item Weeks do not align with daily cycles (the year is not divisible in an exact number of weeks)
+        \end{itemize}
+      \item Seasonality can be irregular: Ramadan and some other religious festivities for instance
+      \item We use two approaches to deal with complex seasonality
+        \begin{enumerate}
+        \item Trigonometric representation of seasonality
+        \item Simplification of seasonal terms
+        \end{enumerate}
+  \end{wideitemize}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Binary and Trigonometric Seasonality}
+  \begin{itemize}
+  \item Consider a single deterministic seasonal cycle. We can model this either by:
+    \begin{itemize}
+      \item \textbf{Indicator variables} (e.g. friday's dummy: equals to 1 on Friday and 0 otherwise)
+      \item \textbf{Trigonometric variables} (cf. Fourier Analysis): Trigonometric approach
+    \end{itemize}
+  \end{itemize}
+\makebox[\linewidth]{\includegraphics[width=0.65\paperwidth]{../static/course_2_img/binary_trigonometric.PNG}}    
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Binary and Trigonometric Seasonality: Pros and Cons}
+  \begin{wideitemize}
+  \item Elimination of terms:
+    \begin{itemize}
+    \item Eliminating terms from the binary (indicator variable) representation, removes the effect of seasonal periods
+    \item Eliminating terms in the trigonometric representation results in smoother approximations of the seasonal shape 
+    \item Elimination of terms can be done using information criteria
+    \end{itemize}
+  \item Besides, trigonometric representation is more parsimonious, as it involves less parameters to estimate: reduce parametric noise
+  \item Model-wise: ARIMA with dummy variables for seasonality versus SARIMA (“Seasonal ARIMA”) that suggests stochastic seasonality
+  \end{wideitemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{ARIMA with Trigonometric Seasonality}
+  \begin{wideitemize}
+    \item $ARIMA(p, d, q)(P_1, D_1, Q_1)_{S_1}$
+    \item $S_1 = 5$ days in the week
+    \item The model contains trigonometric variables of the form sin$\frac{2 t \times i_j \pi}{S_j}$ and cos$\frac{2 t \times i_j \pi}{S_j}$
+      \begin{itemize}
+      \item $i_j$
+      \end{itemize}
+  \end{wideitemize}
 \end{frame}
 
 

@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-07 07:38:33 A13258Q>
+% Time-stamp: <2022-11-07 11:50:04 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -201,7 +201,7 @@
 
 \begin{frame}
   \frametitle{Difference between Confidence Interval and Prediction Interval}
-     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/pi_ci.png}}  
+     \makebox[\linewidth]{\includegraphics[width=0.75\paperwidth]{../static/course_3_img/pi_ci.png}}  
 \end{frame}
 
 
@@ -243,17 +243,81 @@
       e_{T+h} = y_{T+h} - \hat{y}_{T+h}|Y_T, \dots, Y_1
     \end{equation*}
   \end{block}
+
+\medskip
+  
+\begin{wideitemize}
+    \item The conditional set $Y_T, \dots, Y_1$ should only be taken from the training dataset
+    \item The true value $y_{T+h}$ is taken from the test set
+    \item Unlike residuals, forecast errors on the test involve multi-step forecasts
+    \item These are the \textbf{true} forecast error, as the test data is not used to compute $\hat{y}_{T+h}$
+  \end{wideitemize}
   
 \end{frame}
 
+\begin{frame}
+  \frametitle{Example: Forecasting Beer Production}
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/beer_forecast.PNG}}  
+\end{frame}
+
+\begin{frame}{Measures of Forecast Accuracy}
+
+  \begin{alertblock}{Main Metrics}
+    \begin{wideitemize}
+    \item \textbf{MAE}: mean absolute errors $\frac{1}{S}\sum_{s \in S} |e_{s, T+h}|$
+    \item \textbf{MSE}: mean squared errors $\frac{1}{S}\sum_{s \in S} (e_{s, T+h})^2$
+    \item \textbf{MAPE}: mean absolute percentage errors $\frac{1}{S}100*\sum_{s \in S} \frac{|e_{s, T+h}|}{|y_{s, t+h}|}$
+    \item \textbf{RMSE}: root mean squared errors: $\sqrt{\frac{1}{S}\sum_{s \in S} (e_{s, T+h})^2}$
+    \end{wideitemize}
+  \end{alertblock}
+
+  With:\\
+  
+  \begin{itemize}
+  \item $y_{T+h}$: T+h observation, h being the horizon (h = 1, 2, ..., H)
+  \item $\hat{y}_{T+h|T}$: the forecast based on data up to time $T$
+  \item $e_{T+h} = y_{T+h} - \hat{y}_{T+h|T}$: The forecast errors
+  \item $S$ is the testing sample
+  \end{itemize}
+
+  Note:\\
+  \begin{itemize}
+  \item MAE, MSE and RMSE are all \textbf{scale dependent}
+  \item MAPE is scale independent but is only sensible if $y_t >> 0 \qquad \forall \ t$
+  \item \textbf{Most commonly used: Time Cross-Validation with the lowest RMSE}
+  \end{itemize}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Time Series Cross-Validation}
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/time_series_cv_1.PNG}}  
+  \end{frame}
+
+\begin{frame}
+  \frametitle{Time Series Cross-Validation}
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/time_series_cv_2.PNG}}  
+  \end{frame}
+
+\begin{frame}
+  \frametitle{Time Series Cross-Validation}
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/time_series_cv_3.PNG}}  
+  \end{frame}
+
+\begin{frame}
+  \frametitle{Time Series Cross-Validation}
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/time_series_cv_4.PNG}}  
+  \end{frame}
+
+\begin{frame}
+  \frametitle{Time Series Cross-Validation}
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/time_series_cv_5.PNG}}  
+  \end{frame}
 
 
 
-
-
-
-
-
+  
+  
 
 %% ---------------------------------------------------------------------------
 %% End document

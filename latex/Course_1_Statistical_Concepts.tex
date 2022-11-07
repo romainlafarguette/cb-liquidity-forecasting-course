@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-07 05:29:09 A13258Q>
+% Time-stamp: <2022-11-08 02:59:42 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -25,6 +25,8 @@
 \usepackage{graphicx} % Insert graphics
 \usepackage{subfig} % Multiple figures in one graphic
 \graphicspath{{/../static/img}{/../static/diagrams}}
+
+
 
 % Layout
 \usepackage{changepage}
@@ -75,7 +77,7 @@
 %% ---------------------------------------------------------------------------
 \title[Concepts]{Core Concepts in Financial Econometrics}
 \author[R. Lafarguette]{Romain Lafarguette, Ph.D.}
-\institute[IMF]{ADIA Quant \& IMF External Consultant\thanks{\scriptsize{\emph{This training material is the property of the International Monetary Fund (IMF) and is intended for use in IMF courses. Any reuse requires the permission of the IMF.}}}}
+\institute[IMF STX]{Quant \& IMF External Expert\thanks{\scriptsize{\emph{This training material is the property of the International Monetary Fund (IMF) and is intended for use in IMF courses. Any reuse requires the permission of the IMF.}}}}
 
 \date[STI, 08 Nov 2022]{Singapore Training Institute, 08 November 2022}
 
@@ -83,8 +85,7 @@
     \begin{figure}
     \centering
     \subfloat{{\includegraphics[width=2cm]{../static/img/imf_logo}}}%
-    \end{figure}
-}
+    \end{figure}}
 
 
 % Slide between sections
@@ -106,6 +107,18 @@
 \end{frame}
 
 
+\begin{frame}
+  \frametitle{Resources}
+  \begin{wideitemize}
+    \item This 4-day course follows the free and open-source handbook of Rob Hyndman, available online: \href{https://otexts.com/fpp3/}{\beamergotobutton{https://otexts.com/fpp3/}} 
+    \item I have also borrowed some intuitive explanations from Christophe Hurlin's slides: \href{https://sites.google.com/view/christophe-hurlin/teaching-resources}{\beamergotobutton{https://sites.google.com/view/christophe-hurlin/teaching-resources}}
+
+    \item At the introductory level: \emph{Basic Econometrics} (2008) by Damodar Gujarati and Dawn Porter's. They have 5 chapters on time series       
+    \item A good book on time series analysis for finance: \emph{The Econometric Modelling of Financial Time Series} (2008), by Terence C. Mills and Raphael N. Markellos
+    \item The main reference is Hamilton, but is difficult to read...: \emph{Time Series Analysis} (1994), by James Hamilton 
+  \end{wideitemize}
+\end{frame}
+
 \begin{frame}{Outline of the Course}
 \tableofcontents
 \end{frame}
@@ -114,14 +127,13 @@
 %% ---------------------------------------------------------------------------
 %% Core
 %% ---------------------------------------------------------------------------
-
 \section{Data Concepts}
 
 \begin{frame}
   \frametitle{Overview}
 
 Financial econometrics (including time-series econometrics) are based on four main elements:\\
-\smallskip
+\medskip
 
   \begin{wideenumerate}
     \item A sample of data
@@ -137,7 +149,7 @@ Financial econometrics (including time-series econometrics) are based on four ma
   \frametitle{Data Types}
 
   In econometrics, sets can be mainly distinguished in three types:\\
-  \smallskip
+  \medskip
   
   \begin{wideenumerate}
     \item Cross-sectional data
@@ -150,8 +162,9 @@ Financial econometrics (including time-series econometrics) are based on four ma
 % ADD some diagrams
 \begin{frame}
   \frametitle{Cross-Sectional Data}
-  Cross-sectional data are the most common type of data encountered in statistics and econometrics.\\ 
-  \smallskip
+  Cross-sectional data are the most common type of data encountered in statistics and econometrics.\\
+  \medskip
+
   
   \begin{wideitemize}
     \item Data at the entities level: banks, countries, individuals, households, etc.
@@ -177,8 +190,8 @@ Financial econometrics (including time-series econometrics) are based on four ma
 
 
 \begin{frame}
-  \frametitle{Panel Data}
-  Also called longitudinal data. They contain the most information and allow for more complex estimation and analysis.\\
+  \frametitle{Panel/Longitudinal Data}
+  Panel data contain the most information and allow for more complex estimation and analysis.\\
 
   \medskip
 
@@ -187,7 +200,12 @@ Financial econometrics (including time-series econometrics) are based on four ma
     \item Combine cross-sectional and time-series information
     \item Present several advantages with respect to cross-sectional and time series data, depending on the topic at hands
   \end{wideitemize}
+\end{frame}
 
+\begin{frame}
+  \frametitle{Difference between Cross-Sectional and Panel Data}
+  \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/cross_sectional_studies.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Source:\thinspace{\scriptsize\itshape cdn.scribbr.com/wp-content/uploads//2020/05/x-sectional-vs-long-graphic.png}}
 \end{frame}
 
 
@@ -208,6 +226,13 @@ Financial econometrics (including time-series econometrics) are based on four ma
 
 
 \begin{frame}
+  \frametitle{Population vs. Sample}
+  \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/population_sample.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape medium.com/analytics-vidhya}}
+\end{frame}
+
+    
+\begin{frame}
   \frametitle{Data Generating Process}
   
   \begin{block}{Definition: Data Generating Process}
@@ -219,13 +244,20 @@ Financial econometrics (including time-series econometrics) are based on four ma
   \end{block}
 
   \begin{wideenumerate}
-    \item The DGP is the "true" model that has generated the dataset $x_1, \dots, x_t$
-    \item In reality, we can only observe the time series a \textbf{finite number of times}
+    \item DGP: "true" model that generated the data $x_1, \dots, x_t$
+    \item But we only observe the time series a \textbf{finite number of times}
     \item However, it is convenient to allow - theoretically - the number of observations to be \textbf{infinite}: $\{X_t\}_{t \ \in \ \mathbb{Z}}$. In this case,$\{X_t\}_{t \ \in \ \mathbb{Z}}$ is called a discrete time \textbf{stochastic process} 
   \end{wideenumerate}
 
   
 \end{frame}
+
+\begin{frame}
+  \frametitle{DGP, Population and Sample}
+  \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/data_generating_process.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Source:\thinspace{\scriptsize\itshape bookdown.org/cristobalmoya}}
+\end{frame}
+
 
 \begin{frame}
 
@@ -257,13 +289,13 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
 
 \medskip
   
-    \makebox[\linewidth]{\includegraphics[height=0.6\paperheight]{../static/course_1_img/dgp_econometric_model.jpeg}}
-  
-  
+    \makebox[\linewidth]{\includegraphics[height=0.6\paperheight]{../static/course_1_img/dgp_model.PNG}}
+    \hspace*{15pt}\hbox{\scriptsize Source:\thinspace{\scriptsize\itshape statisticalmachinelearning.com/wp-content/uploads/2019/12/SMLframework2.jpg}}
+    
 \end{frame}
 
 
-\section{Statistical Inference}
+\section{Empirical Strategy}
 
 \begin{frame}
   \frametitle{Econometric Model}
@@ -344,6 +376,7 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
 \end{frame}
 
 
+\section{Refresher on Probability Theory}
 \begin{frame}
   \frametitle{Refresher: Random Variables}
   \begin{wideitemize}
@@ -362,9 +395,25 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
   \end{wideitemize}  
 \end{frame}
 
+
+\begin{frame}
+  \frametitle{Random Variables: Intuition}
+  \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/random_variable.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Source:\thinspace{\scriptsize\itshape Wikipedia}}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Random Variables: Mapping}
+  \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/random_variable_mapping.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape iqss.github.io/prefresher/images/rv.png}}
+\end{frame}
+
+
 \begin{frame}
   \frametitle{Random Variables (II)}    
-  \begin{itemize}
+  \begin{wideitemize}
   \item Random variables are the "building block" of statistics:
     \begin{wideitemize}
     \item Random variables are characterized by their distribution (generating
@@ -374,7 +423,7 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
       distribution, etc.
     \item The main theorems in statistics (law of large numbers, central limit
       theorem, etc.) leverage the properties of random variables
-    \end{itemize}
+    \end{wideitemize}
   \end{wideitemize}
 \end{frame}
 
@@ -434,7 +483,20 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
 \end{frame}
 
 
-% TODO: add charts
+\begin{frame}
+  \frametitle{Mean, Variance, Kurtosis}
+  \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/moments_example.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape iqss.github.io/prefresher/images/rv.png}}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Skewness}
+  \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/skewness.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape iqss.github.io/prefresher/images/rv.png}}
+\end{frame}
+
 
 \begin{frame}
   \frametitle{Moments: In Practice}
@@ -448,7 +510,7 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
 \end{frame}
 
 
-
+\section{Statistical Inference}
 \begin{frame}
   \frametitle{Estimator}
 
@@ -512,6 +574,8 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
   \end{frame}
 
 
+
+  
   \begin{frame}
     \frametitle{What Constitutes a Good Estimator?}
     The idea is to study the properties of the \textbf{sampling distribution} of the estimator $\hat{\theta}$, and especially its moments, such as:\\
@@ -519,8 +583,8 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
     \medskip
 
     \begin{wideitemize}
-    \item $\mathbb{E}[\hat{\theta}]$ for the biais
-    \item $\mathbb{V}[\hat{\theta}]$ for the precision
+    \item $\mathbb{E}[\hat{\theta}]$ for the biais: the difference between the true value and the point estimate
+    \item $\mathbb{V}[\hat{\theta}]$ for the precision: the variance of the estimator
     \item $\mathbb{S}[\hat{\theta}]$ for the symmetry
     \item $\mathbb{K}[\hat{\theta}]$ for the tail-risks  
     \item etc.
@@ -675,7 +739,57 @@ X_t \ \overset{d}{\to} \ X \quad \Leftrightarrow \quad  F_T(x) = F(x) \qquad \ \
   \end{frame}
 
 
+  \begin{frame}
+    \frametitle{Bias Variance Tradeoff}
 
+
+    \begin{wideitemize}
+    \item Bias–variance tradeoff: property of a model that the variance of the parameter estimated across samples can be reduced by increasing the bias in the estimated parameters
+      
+    \item The bias error is an error from erroneous assumptions in the learning algorithm.
+      \begin{itemize}
+      \item High bias can cause an algorithm to miss the relevant relations between features and target outputs (underfitting)
+      \end{itemize}
+
+        
+    \item The variance is an error from sensitivity to small fluctuations in the training set.
+      \begin{itemize}
+      \item High variance may result from an algorithm modeling the random noise in the training data (overfitting)
+      \end{itemize}             
+    \end{wideitemize}
+      
+  \end{frame}
+
+
+\begin{frame}
+  \frametitle{Underfit, Optimal, Overfit: Intuition}
+     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/overfit_underfit.PNG}}  
+\end{frame}
+
+  
+  \begin{frame}
+    \frametitle{Bias Variance Tradeoff: Intuition}
+      \makebox[\linewidth]{\includegraphics[height=0.8\paperheight]{../static/course_1_img/bias_variance_tradeoff.PNG}}
+      \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape www.cs.cornell.edu/courses/cs4780/2018fa/lectures}}
+
+  \end{frame}
+  
+
+  \begin{frame}
+    \frametitle{Simpson Paradox}
+    \makebox[\linewidth]{\includegraphics[height=0.4\paperheight]{../static/course_1_img/simpson_1.PNG}}
+    \makebox[\linewidth]{\includegraphics[height=0.4\paperheight]{../static/course_1_img/simpson_2.PNG}}
+      \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape towardsdatascience.com/what-is-simpsons-paradox-4a53cd4e9ee2}}    
+  \end{frame}
+
+  
+  \begin{frame}
+    \frametitle{Pay Attention to Conditioning: Simpson Paradox}
+      \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/simpson_paradox.PNG}}
+      \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape towardsdatascience.com/what-is-simpsons-paradox-4a53cd4e9ee2}}    
+  \end{frame}
+
+  
 \section{Statistical Features and Properties}
 
 \begin{frame}
