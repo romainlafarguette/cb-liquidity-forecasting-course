@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-08 07:28:32 A13258Q>
+% Time-stamp: <2022-11-08 19:59:19 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -25,8 +25,6 @@
 \usepackage{graphicx} % Insert graphics
 \usepackage{subfig} % Multiple figures in one graphic
 \graphicspath{{/../static/img}{/../static/diagrams}}
-
-
 
 % Layout
 \usepackage{changepage}
@@ -115,38 +113,330 @@
 %% ---------------------------------------------------------------------------
 %% The IMF Forecasting Framework
 %% ---------------------------------------------------------------------------
-
+\section{The IMF Forecasting Framework}
 
 \begin{frame}
-  \frametitle{The IMF Liquidity Forecasting Framework: Overview}
+  \frametitle{Overview: The IMF Liquidity Forecasting Framework}
 
   \begin{wideitemize}
-  \item Forecasting infrastructure based on high-quality open-source codes
-    \begin{itemize}
+  \item Forecasting infrastructure based on high-quality \textbf{open-source codes}
+    \begin{wideitemize}
     \item Forecast the three main autonomous factors separately and the net liquidity position
     \item Using the most recent methods in the statistical literature
-    \end{itemize}
+    \end{wideitemize}
 
-  \item Easy to use for central banks: complex modeling issues are taken care of automatically
-    \begin{itemize}
+  \item \textbf{Easy to use} for central banks: complex modeling issues are taken care of automatically
+    \begin{wideitemize}
     \item Open-source codes, free to use, up to the best programming standards
     \item Provides automatic reporting and data visualization for daily operations
-    \end{itemize}
+    \end{wideitemize}
     
-  \item Team of experts to help the authorities during missions
-    \begin{itemize}
+  \item \textbf{Team of experts to help} the authorities during missions
+    \begin{wideitemize}
     \item Deploy the model and help the authorities to customize it and use it
-    \end{itemize}
+    \end{wideitemize}
   \end{wideitemize}
   
 \end{frame}
 
+
+\begin{frame}
+  \frametitle{Refresher: Analytical Central Bank Balance Sheet}
+  \makebox[\linewidth]{\includegraphics[width=0.75\paperwidth]{../static/course_2_img/cb_balance_sheet.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Author}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Autonomous Factors and Policy Position}
+  \makebox[\linewidth]{\includegraphics[width=0.75\paperwidth]{../static/course_2_img/policy_position.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Author}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Liquidity Forecasting and Management}
+  
+  \begin{wideitemize}
+  \item Calibration of the regular, \textbf{short-term OMO} (Open Market Operations)
+    \begin{itemize}
+     \item OMO to reach central bank optimal level/growth rate, based on the autonomous factors forecasts      
+    \end{itemize}
+
+  \item \textbf{Fine-tuning operations}
+    \begin{itemize}
+      \item Fine-tuning operations to smooth unexpected, unforecasted liquidity developments
+    \end{itemize}
+  
+  \item Calibration of the \textbf{required reserves with averaging}
+    \begin{itemize}
+      \item Banks use reserves averaging to smooth their liquidity during the reserves maintenance period
+      \item Calibrate required reserves to absorb the expected forecasting errors
+    \end{itemize}
+
+  \item Model-based approach to \textbf{calibrate the different monetary policy instruments}
+    \begin{itemize}
+      \item Short-term: steer the domestic rate and fine-tune
+      \item Stable: long term instruments, market and yield curve development
+      \item Buffer: required reserves 
+    \end{itemize}    
+  \end{wideitemize}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Why Accurate Liquidity Forecasting is Important?}
+
+  \begin{wideitemize}
+  \item Calibrate central bank operations accurately
+    \begin{itemize}
+    \item Planify structural operations, calibrate the monetary policy instruments
+    \end{itemize}
+
+  \item Mitigate money markets volatility and strengthen financial stability
+  \item Improve monetary policy transmission
+  \item Support market development
+  \end{wideitemize}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Autonomous Factors Drivers}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/drivers_autonomous_factors.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Author}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Use Specific Models for Each Autonomous Factor}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/driver_specific.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Author}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Seasonality in Practice: Currency in Circulation}
+  \makebox[\linewidth]{\includegraphics[width=0.75\paperwidth]{../static/course_2_img/seasonal_patterns_practice.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape IMF TA mission}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Models Family}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/models_family.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Author}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Statistical Tradeoffs}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/statistical_tradeoffs.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Author}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Models Selection}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/model_selection.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Author}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Empirical Strategy}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/empirical_strategy.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Author}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Underfit, Optimal, Overfit: Intuition}
+  \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/overfit_underfit.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape towardsdatascience}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Underfit, Optimal, Overfit and Model Complexity}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/prediction_error_complexity.png}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Scott Fortmann-Roe}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Out of Sample Concept}
+  \makebox[\linewidth]{\includegraphics[width=0.75\paperwidth]{../static/course_2_img/out_of_sample_concept.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Author}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Out of Sample Example: Overfit}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/overfit_poly_7.png}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape towardsdatascience.com/an-example-of-overfitting-and-how-to-avoid-it}}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Out of Sample Example: Correct Fit}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/fit_poly_2.png}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape towardsdatascience.com/an-example-of-overfitting-and-how-to-avoid-it}}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Operational Procedure}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/operational_procedure.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Author}}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Software Infrastructure}
+    \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/software_infrastructure.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Author}}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Beyond Models: Institutional Arrangements to Improve Liquidity Forecasts}
+
+  \begin{wideitemize}
+   \item The Treasury should anticipate the government position based on the government expected cash flows and debt issuance schedule
+   \item Ease liquidity management and forecasting via Treasury Single Account
+   \item Memorandum of Understanding to share the information between the Treasury and the central bank
+   \item Gather information from important participants (liquidity contact group) including:
+     \begin{itemize}
+     \item Large companies with FX transactions (e.g. commodities importers/exporters)
+     \item Sovereign wealth fund, large money market funds, etc.  
+     \end{itemize}
+  \end{wideitemize}    
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Forecasts Publication and Transparency}
+
+  \begin{wideitemize}
+  \item Once the forecasting model is well functioning and accurate, the central bank should publish its liquidity forecasts
+    \begin{itemize}
+    \item Help market participants to manage their liquidity
+    \end{itemize}
+
+  \item The central bank should also publish its forecasting methodology
+    \begin{itemize}
+    \item Share technical capacity with the market
+    \item Increase transparency
+    \item Reinforce central bank credibility
+    \end{itemize}    
+  \end{wideitemize}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Summary and Contributions}
+  \begin{wideenumerate}
+    \item Forecast the three main autonomous factors with advanced models
+    \item Combine the autonomous factors forecasts into a single liquidity measure
+    \item Incorporate risk into liquidity forecasts
+    \item Use a robust modeling framework to deal with structural breaks and complex data samples
+    \item Automatic data reporting and data visualization
+    \item User-friendly interface based on an open-source and free statistical software (R)
+    \item Community of experts, working on public codes (Github)
+  \end{wideenumerate}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Main References}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/main_references.PNG}}
+  %\hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Self}}
+\end{frame}
+
+\section{Q \& A}
+
+\begin{frame}
+  \frametitle{Question 1}
+  
+  \textbf{What are the benefits of accurate liquidity forecasting for central banks operations? Multiple answers possible:}\\
+
+  \bigskip
+
+  \begin{wideenumerate}
+    \item Reduce inflation
+    \item Better calibrate the operations
+    \item Reduce the interbank interest rate volatility 
+    \item Stabilize the exchange rate
+    \item Support the interbank market development
+  \end{wideenumerate}
+  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Question 2}
+  \textbf{Which strategy is valid to reduce the risk of being reliant of a single model (modeling risks)}? Multiple answers possible:\\
+  \bigskip
+
+  \begin{wideenumerate}
+  \item Model averaging
+  \item Use large data sample 
+  \item Remove outliers
+  \item Dynamic model selection
+  \item Complement the results with expert judgment
+   
+  \end{wideenumerate}
+  
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Question 3}
+
+  \textbf{Why is it more appropriate to evaluate the performance of models out-of-sample rather than in-sample? Multiple answers possible:}\\
+  \bigskip
+  
+  \begin{wideenumerate}
+    \item Reduce the impact of outliers
+    \item Avoid structural breaks
+    \item Avoid overfitting
+    \item Test forecasting in real conditions
+  \end{wideenumerate}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Question 4}
+
+\textbf{Under which circumstances should you revalidate the forecasting models? Multiple answers possible:}\\
+
+  \bigskip
+
+  \begin{wideenumerate}
+    \item A few weeks after a structural break
+    \item A long time (e.g., a quarter) after the last validation
+    \item After you observe a loss in forecasting accuracy
+  \end{wideenumerate}
+  
+\end{frame}
 
 
 %% ---------------------------------------------------------------------------
 %% Going Deep Into the Models
 %% ---------------------------------------------------------------------------
 \section{ETS Model}
+
+\begin{frame}
+  \frametitle{Exponential Smoothing Patterns}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_2_img/exponential_smoothing_patterns.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Medium}}
+\end{frame}
+
 
 \begin{frame}
   \frametitle{Perspective}
@@ -164,6 +454,13 @@
   \item Equivalent ETS state-space models have been developped in the 1990s and the 2000s
   \end{itemize}
   
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Decomposing A Time-Series}
+  \makebox[\linewidth]{\includegraphics[width=0.75\paperwidth]{../static/course_2_img/time_series_decomposition.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape medium.com}}
 \end{frame}
 
 
@@ -254,7 +551,7 @@
 
 
 \begin{frame}{State-Space Representation for Additive Models}
-  \begin{block}{State-Space Representation}
+  \begin{alertblock}{State-Space Representation}
     \begin{itemize}
     \item \textbf{Measurement equation}: $y_t = l_{t-1} + \epsilon_t$, where $\epsilon_t \sim \mathcal{N}(0, \sigma^2)$
       \begin{itemize}
@@ -265,11 +562,11 @@
       \item The state equation is evolution of the state variable ($l_t$) through time
       \end{itemize}
      \end{itemize}
-  \end{block}
+  \end{alertblock}
 
 
   \begin{itemize}
-  \item Both equations have the same error process $\epsilon$
+  \item Both equations have the same error process $\epsilon_t$
   \end{itemize}
   
 \end{frame}
@@ -281,12 +578,12 @@
   \item Some easy algebra, substituting $\hat{y}_{t|t-1} = l_{t-1}$ gives   
   \end{itemize}
 
-  \begin{block}{State-Space Representation}
+  \begin{alertblock}{State-Space Representation}
     \begin{itemize}
     \item \textbf{Measurement equation}: $y_t = l_{t-1}(1+\epsilon_t)$
     \item \textbf{State equation}: $l_t = l_{t-1}(1+\alpha*\epsilon_t)$
     \end{itemize}
-  \end{block}
+  \end{alertblock}
 
 Implication: Models with additivative and multiplicative errors with the same parameters generate \textbf{the same point forecasts but with different prediction intervals}
   
@@ -1139,9 +1436,9 @@ y_t = (1+\phi_1)y_{t-1} - (\phi_1 - \phi_2)y_{t-2} - (\phi_2 - \phi_3)y_{t-3} - 
     \item Prediction intervals increase in size with the forecasting horizon
     \item Prediction intervals can be difficult to calculate by hand
     \item Calculations assume that the residuals are \textbf{uncorrelated} and \textbf{normally distributed}
-    \item Prediction intervals tend to be too narrow ompared to the true uncertainty:
+    \item Prediction intervals tend to be too narrow compared to the true uncertainty:
       \begin{itemize}
-      \item The uncertainty in the parameter estimateas has not been accounted for
+      \item The uncertainty in the parameter estimates has not been accounted for
       \item The ARIMA model assumes that the recent historical patterns won't change during the forecast period
       \item The ARIMA model assumes uncorrelated future errors
       \end{itemize}
@@ -1149,6 +1446,15 @@ y_t = (1+\phi_1)y_{t-1} - (\phi_1 - \phi_2)y_{t-2} - (\phi_2 - \phi_3)y_{t-3} - 
 \end{frame}
 
 \section{Seasonal ARIMA (SARIMA)}
+
+
+\begin{frame}
+  \frametitle{Non-Stationarity and Seasonal Patterns}
+  \makebox[\linewidth]{\includegraphics[width=0.75\paperwidth]{../static/course_2_img/time_series_seasonal_patterns.jpeg}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape medium.com}}
+\end{frame}
+
+
 \begin{frame}
   \frametitle{Seasonal ARIMA (SARIMA)}
 
@@ -1338,7 +1644,20 @@ Example: $ARIMA(1,1,1)(1,1,1)_4$, without constant
 
 
 
+\begin{frame}
+  \frametitle{Question 1}
 
+\textbf{What are the problems associated with using many binary variables to model seasonality? Multiple answers possible:}\\
+
+\bigskip
+
+\begin{wideenumerate}
+  \item Complicated to estimate
+  \item Takes excessive computation time 
+  \item Add parametric noise
+  \item Risk of overfit
+\end{wideenumerate}  
+\end{frame}
 
 
 
