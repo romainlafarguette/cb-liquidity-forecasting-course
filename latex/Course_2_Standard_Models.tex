@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-07 12:17:07 A13258Q>
+% Time-stamp: <2022-11-08 07:28:32 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -25,6 +25,8 @@
 \usepackage{graphicx} % Insert graphics
 \usepackage{subfig} % Multiple figures in one graphic
 \graphicspath{{/../static/img}{/../static/diagrams}}
+
+
 
 % Layout
 \usepackage{changepage}
@@ -73,18 +75,19 @@
 %% ---------------------------------------------------------------------------
 %% Title info
 %% ---------------------------------------------------------------------------
-\title[Canonical Models]{Canonical Models: ETS and ARIMA}
-\author[R. Lafarguette]{Romain Lafarguette, Ph.D.}
-\institute[IMF]{ADIA Quant \& IMF External Consultant\thanks{\scriptsize{\emph{This training material is the property of the International Monetary Fund (IMF) and is intended for use in IMF courses. Any reuse requires the permission of the IMF.}}}}
+\title[IMF CB Liquidity Forecasting]{The IMF Central Bank Liquidity Forecasting Framework}
+\author[R. Lafarguette]{Romain Lafarguette, Ph.D. }
+\institute[IMF STX]{Quant \& IMF External Expert\thanks{\scriptsize{\emph{This training material is the property of the International Monetary Fund (IMF) and is intended for use in IMF courses. Any reuse requires the permission of the IMF.}}} \\
+\begin{center}{\href{https://romainlafarguette.github.io/}{\textcolor{imfblue}{https://romainlafarguette.github.io/}}} \end{center}} 
 
-\date[STI, 08 Nov 2022]{Singapore Training Institute, 08 November 2022}
+\date[STI, 09 Nov 2022]{Singapore Training Institute, 09 November 2022}
 
-\titlegraphic{
+\titlegraphic{\vspace{-0.75cm}
     \begin{figure}
     \centering
     \subfloat{{\includegraphics[width=2cm]{../static/img/imf_logo}}}%
-    \end{figure}
-}
+    \end{figure}}
+
 
 % Slide between sections
 \AtBeginSection[]
@@ -108,6 +111,41 @@
 \tableofcontents
 \end{frame}
 
+
+%% ---------------------------------------------------------------------------
+%% The IMF Forecasting Framework
+%% ---------------------------------------------------------------------------
+
+
+\begin{frame}
+  \frametitle{The IMF Liquidity Forecasting Framework: Overview}
+
+  \begin{wideitemize}
+  \item Forecasting infrastructure based on high-quality open-source codes
+    \begin{itemize}
+    \item Forecast the three main autonomous factors separately and the net liquidity position
+    \item Using the most recent methods in the statistical literature
+    \end{itemize}
+
+  \item Easy to use for central banks: complex modeling issues are taken care of automatically
+    \begin{itemize}
+    \item Open-source codes, free to use, up to the best programming standards
+    \item Provides automatic reporting and data visualization for daily operations
+    \end{itemize}
+    
+  \item Team of experts to help the authorities during missions
+    \begin{itemize}
+    \item Deploy the model and help the authorities to customize it and use it
+    \end{itemize}
+  \end{wideitemize}
+  
+\end{frame}
+
+
+
+%% ---------------------------------------------------------------------------
+%% Going Deep Into the Models
+%% ---------------------------------------------------------------------------
 \section{ETS Model}
 
 \begin{frame}
@@ -161,7 +199,7 @@
   \end{wideitemize}  
 \end{frame}
 
-\section{Additive Models}
+
 \begin{frame}{Level-Only Model ETS(A, N, N) (Simple Smoothing)}
   \begin{block}{Component Form}
     \begin{itemize}
@@ -255,9 +293,6 @@ Implication: Models with additivative and multiplicative errors with the same pa
 \end{frame}
 
 % Add a few charts
-
-
-\section{Models with Trend}
 
 \begin{frame}{Holt's Linear Trend}
 
@@ -899,7 +934,7 @@ Assume that you want to combine a first difference with a seasonal difference:
 \end{frame}
 
 
-\section{Modelling and Forecasting with ARIMA Models}
+\subsection{Modelling and Forecasting with ARIMA Models}
 
 
 \begin{frame}
@@ -1279,7 +1314,7 @@ Example: $ARIMA(1,1,1)(1,1,1)_4$, without constant
 \end{frame}
 
 
-\section{ARIMA versus ETS}
+\subsection{ARIMA versus ETS}
 
 
 \begin{frame}

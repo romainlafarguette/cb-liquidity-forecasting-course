@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-08 02:59:42 A13258Q>
+% Time-stamp: <2022-11-08 07:18:12 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -75,13 +75,14 @@
 %% ---------------------------------------------------------------------------
 %% Title info
 %% ---------------------------------------------------------------------------
-\title[Concepts]{Core Concepts in Financial Econometrics}
-\author[R. Lafarguette]{Romain Lafarguette, Ph.D.}
-\institute[IMF STX]{Quant \& IMF External Expert\thanks{\scriptsize{\emph{This training material is the property of the International Monetary Fund (IMF) and is intended for use in IMF courses. Any reuse requires the permission of the IMF.}}}}
+\title[Core Concepts]{Core Concepts in Financial Econometrics}
+\author[R. Lafarguette]{Romain Lafarguette, Ph.D. }
+\institute[IMF STX]{Quant \& IMF External Expert\thanks{\scriptsize{\emph{This training material is the property of the International Monetary Fund (IMF) and is intended for use in IMF courses. Any reuse requires the permission of the IMF.}}} \\
+\begin{center}{\href{https://romainlafarguette.github.io/}{\textcolor{imfblue}{https://romainlafarguette.github.io/}}} \end{center}} 
 
 \date[STI, 08 Nov 2022]{Singapore Training Institute, 08 November 2022}
 
-\titlegraphic{
+\titlegraphic{\vspace{-0.75cm}
     \begin{figure}
     \centering
     \subfloat{{\includegraphics[width=2cm]{../static/img/imf_logo}}}%
@@ -446,9 +447,9 @@ NB: note that I use $R$ to describe the random variable and $r$ to describe its 
   The pdf is also necessary to define distributions' moments (see after).\\  
 \end{frame}
   
-\begin{frame}
+\begin{frame}{PDF and CDF}
   \begin{wideitemize}
-  \item \textbf{The probability density function (pdf)} usually denoted $f_X(x0)$ (remember than $X$ stands for the random variable, while $x0$ stands for a realization of the random variable) represents the relatively likelihood that the random variable $X$ will fall within a small neighborhood of $x0$ (infinitesimal concept). It is easier to conceptualize the pdf via the cdf
+  \item \textbf{The probability density function (pdf)} usually denoted $f_X(x0)$ (remember than $X$ stands for the random variable, while $x0$ stands for a realization of the random variable) represents the relative likelihood that the random variable $X$ will fall within a small neighborhood of $x0$ (infinitesimal concept). It is easier to conceptualize the pdf via the cdf
   \item \textbf{The cumulative distribution function (cdf)} usually denoted $F_X(x0)$ represents the probability that the random variable will be lower than $x0$. It cumulates the pdf ("all the small neighborhoods") such that:
     \begin{equation*}
 F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh      
@@ -489,7 +490,12 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
   \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape iqss.github.io/prefresher/images/rv.png}}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Kurtosis: Benchmarking against the Normal Distribution}
+  There are different shapes of kurtosis 
 
+ \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/normal versus tails.PNG}}  
+\end{frame}
 
 \begin{frame}
   \frametitle{Skewness}
@@ -532,7 +538,7 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
 
   \begin{exampleblock}{Example: Sample Mean}
     Assume that the observations are drawn from \emph{i.i.d} random variables.\\
-    The \textbf{sample variance} $\hat{sigma}^2_T = \frac{1}{T-1} \sum_{t=1}^T (x_t - \bar{x}_t)^2$
+    The \textbf{sample variance} $\hat{\sigma}^2_T = \frac{1}{T-1} \sum_{t=1}^T (x_t - \bar{x}_t)^2$
   \end{exampleblock}
 
 \textbf{Note:} the denominator is equal to \emph{T-1} as to define a sample variance corrected for the small sample bias. 
@@ -626,7 +632,7 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
       \begin{exampleblock}{Example: Finite Sample Distribution}
         Under the Gaussianity assumption, with a sample size of $T = 10$, then:
         \begin{equation*}
-          \hat{\mu} \sim \mathcal{N}\left( \mu, \frac{\sigma^2}{10} \right) \qquad 9 \times \frac{\hat{sigma^2_T}}{\sigma^2} \sim \chi^2(9)
+          \hat{\mu} \sim \mathcal{N}\left( \mu, \frac{\sigma^2}{10} \right) \qquad 9 \times \frac{\hat{\sigma^2_T}}{\sigma^2} \sim \chi^2(9)
         \end{equation*}        
       \end{exampleblock}
       
@@ -701,7 +707,6 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
     \begin{equation*}
 \hat{X_T} \ \overset{p}{\to} c \ \text{if} \ \Leftrightarrow \quad \text{lim}_{T \to +\infty} \mathbb{P} \left[ |X_T - c| > \epsilon \right] \ = \ 0      
     \end{equation*}
-
     
      \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/distribution_in_proba.PNG}}
     
@@ -718,7 +723,74 @@ F_X(x0) \equiv \mathbb{P}[X \leq x0] = \int_{-infty}^{x0} f_X(h) dh
   
 
   \begin{frame}
-    \frametitle{Convergence in Distribution}
+    \frametitle{Consistent Estimator}
+    \begin{alertblock}{Definition}
+      An estimator is consistent if it converges in probability towards the true value
+
+      \begin{equation*}
+        \hat{\theta}_T \ \overset{p}{\to} \theta \ \text{if} \ \Leftrightarrow \quad \text{lim}_{T \to +\infty} \mathbb{P} \left[ |\theta_T - c| > \epsilon \right] \ = \ 0      
+      \end{equation*}
+    \end{alertblock}
+
+    \begin{wideitemize}
+      \item Consistency can be slow or fast: how many observations do we need to be "reasonably" close to the true value?
+      \item Estimators can be inconsistent if they suffer from endogeneity, non-random observational noise, simultaneity bias, etc.  
+    \end{wideitemize}
+    
+  \end{frame}
+
+
+  \begin{frame}
+    \frametitle{Example of Inconsistency: The Simpson Paradox}
+    \makebox[\linewidth]{\includegraphics[height=0.25\paperheight]{../static/course_1_img/simpson_1.PNG}}
+    \makebox[\linewidth]{\includegraphics[height=0.4\paperheight]{../static/course_1_img/simpson_2.PNG}}
+      \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape towardsdatascience.com/what-is-simpsons-paradox-4a53cd4e9ee2}}    
+  \end{frame}
+
+  
+  \begin{frame}
+    \frametitle{Endogeneity due to Omitted Variable: Simpson Paradox}
+      \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/simpson_paradox.PNG}}
+      \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape towardsdatascience.com/what-is-simpsons-paradox-4a53cd4e9ee2}}    
+  \end{frame}
+
+  
+  \begin{frame}
+    \frametitle{Biased and Unbiased Estimator}
+
+      \begin{wideitemize}
+        \item We are interesting in recovering the true parameter $\theta$ of a DGP ${y_t}_{t \ \in \ \mathbb{Z}} = \mathcal{D}[Y, \theta]$ 
+        \item We have an estimator $\hat{\theta}$
+      \end{wideitemize}
+
+      \begin{alertblock}{Definition: Estimator Bias}
+        
+        \begin{equation*}
+          \text{Bias}(\hat{\theta}) = E_Y[\hat{\theta}] - \theta = E_Y[\hat{\theta} - \theta]
+        \end{equation*}        
+    \end{alertblock}
+
+    \begin{block}{Difference between Consistency and Bias}
+    \begin{wideitemize}
+      \item Note that an estimator can be consistent but biased (e.g. for the mean $\frac{1}{n}\sum x_i + \frac{1}{n}$)
+      \item Likewise, an estimator can be inconsistent and unbiased (e.g $\frac{1}{n}\sum x_i + \text{sin}(n)$)
+    \end{wideitemize}
+      
+    \end{block}
+    
+    
+  \end{frame}
+
+
+  \begin{frame}
+    \frametitle{Consistency vs. Bias}
+    \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_1_img/consistency.PNG}}
+    \hspace*{15pt}\hbox{\scriptsize Source:\thinspace{\scriptsize\itshape Wikipedia}}    
+  \end{frame}
+  
+  
+  \begin{frame}
+    \frametitle{For information: Convergence in Distribution}
 
     \begin{itemize}
 \item  \textbf{Convergence in distribution} is interested in the distribution of the bias (the distance between the estimator and the true value)
@@ -734,14 +806,48 @@ X_t \ \overset{d}{\to} \ X \quad \Leftrightarrow \quad  F_T(x) = F(x) \qquad \ \
     
 \item The convergence in distribution is used to derive the \textbf{asymptotic distribution} of the estimators and to make \textbf{inference} (tests) about the true value of the parameters
 
-    \end{itemize}
+    \end{itemize}    
+  \end{frame}
+
+
+  \begin{frame}
+    \frametitle{Bias, Variance and Mean-Squared Error}
+
+    \begin{block}{Mean Squared Error of an Estimator}
+      \begin{equation*}
+        \text{MSE}(\hat{\theta}) = \mathbb{E}\left[ (\hat{\theta} - \theta)^2 \right]
+      \end{equation*}
+    \end{block}
+
+
+    \begin{alertblock}{$\text{MSE} = \text{Bias}^2 + \text{Variance}$}
+      \begin{equation*}
+       \text{MSE}(\hat{\theta}) = \underbrace{\left(\mathbb{E}(\hat{\theta}) -\theta \right)^2}_{\text{Bias}^2(\hat{\theta})} + \underbrace{\mathbb{E}\left[(\hat{\theta} - \mathbb{E}[\hat{\theta}]) \right]}_{\mathbb{V}(\hat{\theta})}
+      \end{equation*}
+    \end{alertblock}
     
   \end{frame}
 
 
   \begin{frame}
-    \frametitle{Bias Variance Tradeoff}
+    \frametitle{Bias Variance Tradeoff: Intuition}
+      \makebox[\linewidth]{\includegraphics[height=0.8\paperheight]{../static/course_1_img/bias_variance_tradeoff.PNG}}
+      \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape www.cs.cornell.edu/courses/cs4780/2018fa/lectures}}
 
+  \end{frame}
+
+
+  \begin{frame}
+    \frametitle{Would you Choose $\hat{beta}_1$ or $\hat{beta}_2$?}
+      \makebox[\linewidth]{\includegraphics[height=0.7\paperheight]{../static/course_1_img/bias_variance_circle.PNG}}
+      \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape www.cs.cornell.edu/courses/cs4780/2018fa/lectures}}
+
+  \end{frame}
+
+  
+  
+  \begin{frame}
+    \frametitle{Bias Variance Tradeoff}
 
     \begin{wideitemize}
     \item Bias–variance tradeoff: property of a model that the variance of the parameter estimated across samples can be reduced by increasing the bias in the estimated parameters
@@ -760,36 +866,14 @@ X_t \ \overset{d}{\to} \ X \quad \Leftrightarrow \quad  F_T(x) = F(x) \qquad \ \
       
   \end{frame}
 
-
+  
 \begin{frame}
   \frametitle{Underfit, Optimal, Overfit: Intuition}
-     \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/overfit_underfit.PNG}}  
+  \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/overfit_underfit.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape towardsdatascience}}
 \end{frame}
 
-  
-  \begin{frame}
-    \frametitle{Bias Variance Tradeoff: Intuition}
-      \makebox[\linewidth]{\includegraphics[height=0.8\paperheight]{../static/course_1_img/bias_variance_tradeoff.PNG}}
-      \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape www.cs.cornell.edu/courses/cs4780/2018fa/lectures}}
-
-  \end{frame}
-  
-
-  \begin{frame}
-    \frametitle{Simpson Paradox}
-    \makebox[\linewidth]{\includegraphics[height=0.4\paperheight]{../static/course_1_img/simpson_1.PNG}}
-    \makebox[\linewidth]{\includegraphics[height=0.4\paperheight]{../static/course_1_img/simpson_2.PNG}}
-      \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape towardsdatascience.com/what-is-simpsons-paradox-4a53cd4e9ee2}}    
-  \end{frame}
-
-  
-  \begin{frame}
-    \frametitle{Pay Attention to Conditioning: Simpson Paradox}
-      \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/simpson_paradox.PNG}}
-      \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape towardsdatascience.com/what-is-simpsons-paradox-4a53cd4e9ee2}}    
-  \end{frame}
-
-  
+    
 \section{Statistical Features and Properties}
 
 \begin{frame}
@@ -856,13 +940,15 @@ X_t \ \overset{d}{\to} \ X \quad \Leftrightarrow \quad  F_T(x) = F(x) \qquad \ \
 
 \begin{frame}
 \frametitle{Prices are Usually Non-Stationary...}
-    \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/non stationarity prices sp500.PNG}}
+\makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/non stationarity prices sp500.PNG}}
+\hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Christophe Hurlin}}
 \end{frame}
 
 
 \begin{frame}
 \frametitle{... But Returns Are !}
-    \makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/stationarity returns sp500.PNG}}
+\makebox[\linewidth]{\includegraphics[width=0.7\paperwidth]{../static/course_1_img/stationarity returns sp500.PNG}}
+\hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Christophe Hurlin}}
 \end{frame}
 
 
@@ -894,19 +980,33 @@ with $\mu = \mathbb{E}[X_t]$, $\sigma^2 = \mathbb{V}(X_t), \ \forall \ t$ and $\
     The \textbf{sample autocorrelation}, denoted $\hat{\rho}(k)$ of a weak stationary process $X$ is an estimator of $\rho(k)$ defined as:
 
     \begin{equation*} 
-      \hat{\rho}_k = \text{corr}(X_t, X_{t-k}) = \frac{1}{(T-k)\hat{\sigma^2}} \sum_{t=k+1}^{R}(X_t - \hat{mu})(X_{t-k} - \hat{mu})
+      \hat{\rho}_k = \text{corr}(X_t, X_{t-k}) = \frac{1}{(T-k)\hat{\sigma^2}} \sum_{t=k+1}^{R}(X_t - \hat{\mu})(X_{t-k} - \hat{\mu})
     \end{equation*}
 where $\hat{\sigma^2}$ and $\hat{\mu}$ are consistent estimators of $\mu = \mathbb{E}(X_t)$ and $\sigma^2 = \mathbb{V}(X_t) \qquad \forall t$
   \end{block}
 \end{frame}
 
 
+
+\begin{frame}
+  \frametitle{Autocorrelation and Partial Autocorrelation}
+
+  \begin{itemize}
+  \item Autocorrelation: $\text{corr}(X_t, X_{t-k})$
+  \item Partial Autocorrelation: $\text{corr}(X_t - \tilde{X}_{t}, \tilde{X}_t - \tilde{X}_{t-k})$ where $\tilde{X}_{j}$ is a linear combination of the stochastic process that minimize the MSE of $X_{j}$
+  \item Intuition: the partial autocorrelation at lag k is the correlation after removing the effect of any correlations due to the terms at shorter lags
+  \end{itemize}
+  
+  \makebox[\linewidth]{\includegraphics[width=0.6\paperwidth]{../static/course_1_img/acf_pacf.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Shangguan, S et al. \emph{Atmosphere} (2022)}} 
+\end{frame}
+
 \begin{frame}
   \frametitle{Example: Autocorrelation of the SP500}
   The \textbf{Autocorrelation Function (ACF)} (or \textbf{correlogram}) represents the sample autocorrelation for different lags, from $k=1$ to a maximum lag order, for instance $k=15$
 
  \makebox[\linewidth]{\includegraphics[width=0.5\paperwidth]{../static/course_1_img/autocorrelogram.PNG}}
-  
+ \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Christophe Hurlin}} 
 \end{frame}
 
 
@@ -929,7 +1029,8 @@ where $\hat{\sigma^2}$ and $\hat{\mu}$ are consistent estimators of $\mu = \math
 \begin{frame}
   \frametitle{Skewness}
   There are different shapes of kurtosis 
- \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/skewness.PNG}}  
+  \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/skewness.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Towards Data Science}} 
 \end{frame}
 
 
@@ -945,15 +1046,6 @@ where $\hat{\sigma^2}$ and $\hat{\mu}$ are consistent estimators of $\mu = \math
   \item Mandelbrot (1963) recognized the heavy-tailed, highly peaked nature of certain financial time series
   \item These heavy tails can be explained by risk aversion, heard behavior, market microstructure (illiquidity, asymmetric information, etc.)
   \end{itemize}    
-\end{frame}
-
-
-
-\begin{frame}
-  \frametitle{Normal versus Tails}
-  There are different shapes of kurtosis 
-
- \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/normal versus tails.PNG}}  
 \end{frame}
 
 
@@ -982,7 +1074,8 @@ where $\hat{\sigma^2}$ and $\hat{\mu}$ are consistent estimators of $\mu = \math
 \begin{frame}
   \frametitle{Volatility Regimes: US VIX}
   The VIX is the implied volatility fo the US SP 500:\\ 
- \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/vix volatility.PNG}}  
+  \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/vix volatility.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Christophe Hurlin}} 
 \end{frame}
 
 
@@ -1008,7 +1101,8 @@ where $\hat{\sigma^2}$ and $\hat{\mu}$ are consistent estimators of $\mu = \math
 \begin{frame}
   \frametitle{Aggregational Gaussanity In Practice}
   The VIX is the implied volatility fo the US SP 500:\\ 
- \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/aggregational gaussianity.PNG}}  
+  \makebox[\linewidth]{\includegraphics[width=0.8\paperwidth]{../static/course_1_img/aggregational gaussianity.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Christophe Hurlin}} 
 \end{frame}
 
 
