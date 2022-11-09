@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-08 19:59:19 A13258Q>
+% Time-stamp: <2022-11-09 23:36:04 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -1578,6 +1578,28 @@ Example: $ARIMA(1,1,1)(1,1,1)_4$, without constant
   \end{wideitemize}
   
 \end{frame}
+
+
+\begin{frame}
+  \frametitle{Problems of an ARIMA with Many Binary Variables}
+
+  \begin{wideitemize}
+  \item Often, central banks forecast currency in circulation by including a large number of binary variables (“dummies”) to capture different seasonality patterns. This is called \textbf{binary seasonality}
+
+  \item In general, this approach should be discouraged, because:
+    \begin{itemize}
+    \item Including a large number of variables imply to estimate many more parameters, hence \textbf{adding parametric noise to the model}
+    \item Many parameters are not relevant/useful, \textbf{increasing noise/signal ratio}
+    \item Reducing the degrees of freedom spurs the \textbf{risk of overfit}
+    \end{itemize}
+    
+  \item We tested a large number of models in different countries, confirming the relatively bad performance of ARIMA with binary seasonality
+    
+  \end{wideitemize}
+
+\end{frame}
+
+
 
 \begin{frame}
   \frametitle{Binary and Trigonometric Seasonality}

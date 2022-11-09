@@ -1,0 +1,124 @@
+% Time-stamp: <2022-11-10 01:18:23 A13258Q>
+% Romain Lafarguette 2020, https://romainlafarguette.github.io/
+
+%% ---------------------------------------------------------------------------
+%% Preamble: Packages and Setup
+%% ---------------------------------------------------------------------------
+% Class 
+\documentclass{beamer}
+
+% Theme
+\usetheme{Boadilla}
+\usecolortheme{dolphin}
+%\setbeamertemplate{headline}{} % Remove the top navigation bar
+
+% Font and encoding
+\usepackage[utf8]{inputenc} % Input font
+\usepackage[T1]{fontenc} % Output font
+\usepackage{lmodern} % Standard LateX font
+\usefonttheme{serif} % Standard LateX font
+
+% Maths 
+\usepackage{amsfonts, amsmath, mathabx, bm, bbm} % Maths Fonts
+
+% Graphics
+\usepackage{graphicx} % Insert graphics
+\usepackage{subfig} % Multiple figures in one graphic
+\graphicspath{{/../static/img}{/../static/diagrams}}
+
+% Layout
+\usepackage{changepage}
+
+% Colors
+\usepackage{xcolor}
+\definecolor{imfblue}{RGB}{0,76,151} % Official IMF color
+\setbeamercolor{title}{fg=imfblue}
+\setbeamercolor{frametitle}{fg=imfblue}
+\setbeamercolor{structure}{fg=imfblue}
+
+% Tables
+\usepackage{booktabs,rotating,multirow} % Tabular rules and other macros
+%\usepackage{pdflscape,afterpage} % Landscape mode and afterpage
+%\usepackage{threeparttable} % Split long tables
+\usepackage[font=scriptsize,labelfont=scriptsize,labelfont={color=imfblue}]{caption}
+
+% Import files
+\usepackage{import}
+
+% Appendix slides
+\usepackage{appendixnumberbeamer} % Manage page numbers for appendix slides
+
+% References
+\usepackage{hyperref}
+
+% A few macros: environments
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{10pt}}{\enditemize}
+\newenvironment{wideenumerate}{\enumerate\addtolength{\itemsep}{10pt}}{\endenumerate}
+
+\newenvironment{extrawideitemize}{\itemize\addtolength{\itemsep}{30pt}}{\enditemize}
+\newenvironment{extrawideenumerate}{\enumerate\addtolength{\itemsep}{30pt}}{\endenumerate}
+
+% Remove navigation symbols and other superfluous elements
+\setbeamertemplate{navigation symbols}{}
+\beamertemplatenavigationsymbolsempty
+
+%\setbeamertemplate{note page}[plain]
+\hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
+\setbeameroption{hide notes}
+
+% Institute font
+\setbeamerfont{institute}{size=\footnotesize}
+\DeclareMathSizes{10}{9}{7}{5}  
+
+%% ---------------------------------------------------------------------------
+%% Title info
+%% ---------------------------------------------------------------------------
+\title[TA Follow-Up]{Questions on the UAE TA Report}
+\author[R. Lafarguette]{Romain Lafarguette, Ph.D. }
+\institute[IMF STX]{Quant \& IMF External Expert\thanks{\scriptsize{\emph{This training material is the property of the International Monetary Fund (IMF) and is intended for use in IMF courses. Any reuse requires the permission of the IMF.}}} \\
+\begin{center}{\href{https://romainlafarguette.github.io/}{\textcolor{imfblue}{https://romainlafarguette.github.io/}}} \end{center}} 
+
+\date[STI, 10 Nov 2022]{Singapore Training Institute, 10 November 2022}
+
+%% ---------------------------------------------------------------------------
+%% Title slide
+%% ---------------------------------------------------------------------------
+\begin{document}
+
+
+\begin{frame}{Questions on Liquidity Forecasting}
+
+  \begin{wideenumerate}
+    \item What are the main features of the data on currency in circulation? % non stationary, trended, irregular seasonality
+    \item What are the main seasonal factors in the UAE? % religious festivities
+    \item At which frequency are the forecasts generated ? % during the RMP, every 10 days
+    \item What are the best individual performing models for each autonomous factor?
+    \item What are the main difficulties faced by the central bank of the UAE for forecasting the government position? What are the mission recommendations to help the CBUAE improving the forecasts of the government position?
+  \end{wideenumerate}
+  
+\end{frame}
+
+
+\begin{frame}{Calibration of the Operational Mix}
+
+  \begin{wideenumerate}
+  \item Why the team has estimated the relationship between commercial banks reserves and the interbank interest rate?
+  \item According to the Poole model, what are the two main drivers explaining the banks' holdings for reserves? % uncertainty and opportunity cost
+  \item How is defined the optimal liquidity surplus?
+    \item What is the rationale to calibrate the issuance of long-term central bank securities via a smoothing filter?
+    \item How are the required reserves calibrated?
+  \end{wideenumerate}
+  
+\end{frame}
+
+
+
+
+%% ---------------------------------------------------------------------------
+%% End Document
+%% ---------------------------------------------------------------------------
+\end{document}
+
+
+
+
