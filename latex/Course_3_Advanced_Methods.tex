@@ -1,4 +1,4 @@
-% Time-stamp: <2022-11-10 01:32:28 A13258Q>
+% Time-stamp: <2022-11-10 13:50:02 A13258Q>
 % Romain Lafarguette 2020, https://romainlafarguette.github.io/
 
 %% ---------------------------------------------------------------------------
@@ -112,8 +112,6 @@
 %% TODO: Add the GARCH picture from the liquidity forecasting framework too
 %% TODO: Add Nemenyi test
 %% ---------------------------------------------------------------------------
-
-
 \section{Advanced Seasonal Models}
 
 \begin{frame}
@@ -213,7 +211,6 @@
 
 \section{Volatility Models: EWMA and GARCH Models}
 
-
 \begin{frame}
   \frametitle{Volatility Estimation}
   \makebox[\linewidth]{\includegraphics[width=0.75\paperwidth]{../static/course_3_img/volatility_decision_tree.PNG}}
@@ -235,16 +232,15 @@
 
 
 \begin{frame}
-  \frametitle{EWMA Formula}
-
-  \makebox[\linewidth]{\includegraphics[height=0.35\paperheight]{../static/course_3_img/ewma_weights.PNG}}
+  \frametitle{EWMA Weights}
+  \makebox[\linewidth]{\includegraphics[height=0.65\paperheight]{../static/course_3_img/ewma_weights.PNG}}
   %\hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Sabrina Jiang}}            
 \end{frame}
 
 
 \begin{frame}
   \frametitle{Homoscedasticity and Heteroscedasticity}
-  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_3_img/homo_hsk.jpeg}}
+  \makebox[\linewidth]{\includegraphics[width=0.95\paperwidth]{../static/course_3_img/homo_hsk.jpeg}}
   \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Medium.com}}          
 \end{frame}
 
@@ -288,8 +284,6 @@
 
 \begin{frame}
   \frametitle{GARCH: Intuition}
-
-
   \begin{wideitemize}
   \item The conditional variance of a GARCH(p, q) depends on:
     \begin{itemize}
@@ -340,17 +334,37 @@ GARCH(1,1) specifications are generally sufficient to capture the dynamics of th
 
 
 \begin{frame}
-  \frametitle{Dynamic of Variance}
-  \makebox[\linewidth]{\includegraphics[width=0.9\paperwidth]{../static/course_3_img/GARCH_remarks.PNG}}
-  %\hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Medium.com}}          
+  \frametitle{Conditional Variance Persistences: Intrinsic and Extrinsic}
+  \begin{itemize}
+  \item The conditional variance $\sigma_t^2 = \omega + \alpha \epsilon^2_{t-1} + \beta \sigma^2_{t-1}$ depends on two effects:
+    \begin{itemize}
+    \item An \textbf{intrinsic persistence} effect through the first lag of the conditional variance
+    \item An \textbf{extrinsic persistence} effect
+    \end{itemize}
+    
+  \item Following a positive (or negative) shock at time \emph{t-1}, the conditional variance at time \emph{t} increases (impact effect) and thus it has an impact on $\epsilon_t = Z_t \sigma_t$
+
+    \begin{equation*}
+      \text{shock} \ z_{t-1} \ > \ 0 \Rightarrow \ \epsilon_{t-1} \ \uparrow \ \Rightarrow \ \sigma_t \ \uparrow \ \dots
+    \end{equation*}
+
+  \item Starting from the next period (at time $t$), the effect of the shock at $t-1$ on the conditional variance at $t+1$ passes through the conditional variance at time $t$ (intrisic persistence)
+
+    \begin{equation*}
+      \text{shock} \ z_{t-1} \ \Rightarrow \ \sigma_t \ \uparrow \ \Rightarrow \ \sigma^2_{t+1} \ \uparrow 
+    \end{equation*}
+\item The overall effect of a shock can be decomposed into a \textbf{contemporaneous effect}, which depends on $\alpha$ and a \textbf{persistence effect} that depends on $\beta$
+    
+  \end{itemize}
 \end{frame}
+
 
 
 \begin{frame}
   \frametitle{Remarks}
 
   \begin{wideitemize}
-  \item One often observes that:
+  \item It is often the case that:
       \begin{wideenumerate}
   \item The sum of the estimates of $\alpha$ and $\beta$ are generally close (but below 1)
   \item The estimate of $\beta$ is generally greater than the one of $\alpha$
@@ -360,57 +374,57 @@ GARCH(1,1) specifications are generally sufficient to capture the dynamics of th
   \end{wideitemize}  
 \end{frame}
 
+\begin{frame}
+  \frametitle{GARCH Extensions}
+  \begin{wideitemize}
+  \item I won't cover them during the course but many extensions have been proposed to extend the GARCH model, including model for dealing with \textbf{asymmetric responses}, \textbf{persistence} and \textbf{long-memory}
+    \begin{wideitemize}
+      \item \textbf{IGARCH model}: Integrated GARCH (model persistence)
+      \item \textbf{GARCH-M model}: GARCH mean, when the mean depends on the volatility
+      \item \textbf{GJR-GARCH model}: Glosten, Jagannathan and Runkle (1993): asymmetric with non-linearities
+      \item \textbf{TGARCH model}: Threshold GARCH captures regimes change
+      \item \textbf{EGARCH model}: Exponential GARCH captures asymmetric responses and big shocks
+    \end{wideitemize}
+  \end{wideitemize}
+\end{frame}
+
 
 \begin{frame}
   \frametitle{Application: FX Modeling}
   \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_3_img/var_fxi_stat_desc.PNG}}
   \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Lafarguette and Veyrune (2021)}}          
-
 \end{frame}
 
 
 \begin{frame}
   \frametitle{Application: GARCH Estimation}
-  \makebox[\linewidth]{\includegraphics[width=0.75\paperwidth]{../static/course_3_img/GARCH_estimation_table.PNG}}
+  \makebox[\linewidth]{\includegraphics[width=0.6\paperwidth]{../static/course_3_img/GARCH_estimation_table.PNG}}
   \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Lafarguette and Veyrune (2021)}}          
-
 \end{frame}
 
 \begin{frame}
   \frametitle{Application: MXN/USD Conditional Volatility}
   \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_3_img/var_fxi_conditional_vol.PNG}}
   \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Lafarguette and Veyrune (2021)}}          
-
 \end{frame}
-
 
 \begin{frame}
   \frametitle{Application: MXN/USD Conditional Density}
   \makebox[\linewidth]{\includegraphics[width=0.75\paperwidth]{../static/course_3_img/var_fxi_conditional_density.PNG}}
   \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Lafarguette and Veyrune (2021)}}          
-
 \end{frame}
-
 
 \begin{frame}
   \frametitle{Application: MXN/USD Fan Chart}
   \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_3_img/var_fxi_fan_chart.PNG}}
   \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Lafarguette and Veyrune (2021)}}          
-
 \end{frame}
-
 
 \begin{frame}
   \frametitle{Application: MXN/USD Intervention Rule}
   \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_3_img/var_fxi_intervention_rule.PNG}}
   \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Lafarguette and Veyrune (2021)}}          
-
 \end{frame}
-
-
-
-
-
 
 \section{Distributional Forecasts and Prediction Intervals}
 \begin{frame}{From Point Forecasts to Distributional Forecasts}
@@ -633,7 +647,29 @@ GARCH(1,1) specifications are generally sufficient to capture the dynamics of th
   \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_3_img/rmse_output.PNG}}
   \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape IMF Framework}}      
     \end{frame}
-  
+
+
+    \begin{frame}
+      \frametitle{Nemenyi Test}
+
+      \begin{wideitemize}
+        \item We can rank the model by RMSE (or another metric), but are the RMSE significantly different? 
+        \item Maybe Model 1 can have a lower RMSE than Model 2, but the difference in RMSE is non-significant
+        \item In which case, we could pool the two models together
+        \item Use a non-parametric test to test the hypothesis of equal RMSE, with the test statistic:
+          \begin{equation*}
+            r_{\alpha, K, N} \approx \frac{q_{\alpha, K}}{\sqrt{2}} \sqrt{\frac{K (K+1)}{6N}}
+          \end{equation*}
+      \end{wideitemize}      
+    \end{frame}
+
+    \begin{frame}
+      \frametitle{Nemenyi Test in Practice}
+  \makebox[\linewidth]{\includegraphics[width=0.85\paperwidth]{../static/course_3_img/nemenyi_test.PNG}}
+  \hspace*{15pt}\hbox{\scriptsize Credit:\thinspace{\scriptsize\itshape Nikolaos Kourentzes}}      
+    \end{frame}
+
+    
     
 \section{Model Combination and Selection}
 
