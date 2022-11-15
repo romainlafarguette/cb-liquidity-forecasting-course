@@ -1,4 +1,4 @@
-# Forecating Central Bank Liquidity
+# Forecasting Central Bank Liquidity
 
 My IMF course on central bank liquidity forecasting.
 
